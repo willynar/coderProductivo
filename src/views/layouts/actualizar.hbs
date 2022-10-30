@@ -1,0 +1,44 @@
+{{> headers}}
+<br>
+{{> navegador}}
+<br>
+<div style="display: flex;justify-content: center;justify-content: center;align-items: center;">
+    <form action="" method="PUT" autocomplete="on" id="formUpdate">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="exampleInputPassword1">Id</label>
+                <input type="number" class="form-control" name="id" value="{{data.id}}" disabled>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="exampleInputPassword1">Producto</label>
+                <input type="text" class="form-control" name="nombre" value="{{data.nombre}}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="exampleInputPassword1">precio</label>
+                <input type="number" class="form-control" name="precio" value="{{data.precio}}">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="exampleInputPassword1">Descripcion</label>
+                <input type="text" class="form-control" name="descripcion" value="{{data.descripcion}}">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="exampleInputPassword1">Codigo</label>
+                <input type="text" class="form-control" name="codigo" value="{{data.codigo}}">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="exampleInputPassword1">Imagen</label>
+                <input type="text" class="form-control" name="foto" value="{{data.foto}}">
+            </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary">Actualizar</button>
+    </form>
+</div>
+{{> scripts}}
+<script type="application/javascript">
+    sessionStorage.setItem("admin", true)
+</script>

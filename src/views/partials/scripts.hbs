@@ -1,0 +1,179 @@
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+    integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+    crossorigin="anonymous"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script type="application/javascript">
+    render();
+    sessionStorage.setItem("admin", false)
+    $("#formSave").submit(function (e) {
+        e.preventDefault();
+        var data = {
+            "nombre": $("input[name='nombre']").val(),
+            "precio": $("input[name='precio']").val(),
+            "timestamp": $("input[name='foto']").val(),
+            "foto": Date.now,
+            "descripcion": $("input[name='descripcion']").val(),
+            "codigo": $("input[name='codigo']").val(),
+            "stock": true,
+            "foto": $("input[name='foto']").val(),
+            "id": 0
+        }
+
+        let admin = sessionStorage.getItem("admin")
+        fetch('http://localhost:8080/api/productos', {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json', 'AdminMode': admin },
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => alert(`Producto guardado`));
+    });
+
+    $("#formUpdate").submit(function (e) {
+        e.preventDefault();
+        var data = {
+            "id": parseInt($("input[name='id']").val()),
+            "nombre": $("input[name='nombre']").val(),
+            "precio":parseInt( $("input[name='precio']").val()),
+            "timestamp": $("input[name='foto']").val(),
+            "foto": Date.now,
+            "descripcion": $("input[name='descripcion']").val(),
+            "codigo": $("input[name='codigo']").val(),
+            "stock": true,
+            "foto": $("input[name='foto']").val(),
+        }
+        let admin = sessionStorage.getItem("admin")
+        fetch('http://localhost:8080/api/productos', {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: { 'Content-Type': 'application/json', 'AdminMode': admin },
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => { window.location = "http://localhost:8080/cargados"; alert(`Producto actualizado`); });
+    });
+
+    function render() {
+        var URLactual = window.location;
+        if (URLactual == "http://localhost:8080/cargados") {
+
+            fetch(`http://localhost:8080/api/productos`)
+                // Converting received data to JSON
+                .then((response) => response.json())
+                .then((data) => {
+                    let html = `<div>
+                                <h5>Sin datos</h5>
+                            </div>`
+                    if (data) {
+                        html = data.map((element, index) => {
+                            var d = new Date(element.date)
+                            let admin = sessionStorage.getItem("admin")
+                            admin = 'true' == admin
+                            let htmladmin = '';
+                            if (admin) {
+                                htmladmin = `<button type="button" class="btn btn-danger mt-3" onclick="deleteProduct('${element.id}')">Eliminar a carrito</button><button type="button" class="btn btn-warning mt-3" onclick="updateProduct('${element.id} ')">Actualizar a carrito</button>`
+                            }
+                            return (
+                                ` <div class="col-sm col-4" style="margin-top:13px !important">
+                                <div class="card " style="width: 18rem;">
+                                    <img class="card-img-top" src="${element.foto}" style="max-width:286px ;max-height:286px ;"
+                                        alt="Card image cap" style="display: block;  margin-left: auto;  margin-right: auto;  width: 50%;">
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <h5>${element.nombre} </h5> <h6>precio: $ ${element.precio}</h6>
+                                        </div>
+
+                                        <p class="card-text">${element.descripcion}</p>
+                                        <button type="button" class="btn btn-primary" onclick="addProductCarrito('${element.id}')">Agregar a carrito</button>
+                                        ${htmladmin}
+                                    </div>
+                                </div>
+                            </div>`
+                            )
+                        }).join(" ");
+                    }
+                    document.getElementById("datosProductos").innerHTML = html
+                });
+        }
+
+    }
+
+    function crearIdLocalCarrito() {
+
+        let id = sessionStorage.getItem("idCarrito")
+        if (id == null) {
+            console.log(id)
+            fetch('http://localhost:8080/api/carrito', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+            })
+                .then(response => response.json())
+                .catch(error => console.error('Error:', error))
+                .then(response => {
+                    sessionStorage.setItem("idCarrito", response)
+                });
+        }
+    }
+
+    async function addProductCarrito(id_pro) {
+        crearIdLocalCarrito()
+        let id = sessionStorage.getItem("idCarrito")
+        const response = await fetch(`http://localhost:8080/api/productos/${id_pro}`);
+        let producto = await response.json();
+
+        fetch(`http://localhost:8080/api/carrito/${id}/productos`, {
+            method: 'POST',
+            body: JSON.stringify(producto),
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => alert(`${response}`))
+    }
+
+    async function AdminMode() {
+        let admin = sessionStorage.getItem("admin")
+        if (admin == null) {
+            admin = true
+        } else {
+            admin = 'true' == admin
+            admin = !admin
+        }
+        console.log(admin)
+
+        sessionStorage.setItem("admin", admin)
+        render();
+
+    }
+
+    async function deleteProduct(id_pro) {
+        let admin = sessionStorage.getItem("admin")
+        fetch(`http://localhost:8080/api/productos/${id_pro}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json', 'AdminMode': admin },
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => render())
+    }
+
+    async function updateProduct(id_pro) {
+
+        let admin = sessionStorage.getItem("admin")
+        window.location = `http://localhost:8080/actualizar/${id_pro}`
+    }
+</script>

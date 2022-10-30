@@ -1,0 +1,66 @@
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"
+    integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+"
+    crossorigin="anonymous"></script>
+
+<script type="application/javascript">
+    render();
+    function render() {
+        let id = sessionStorage.getItem("idCarrito")
+        fetch(`api/carrito/${id}/productos`)
+            // Converting received data to JSON
+            .then((response) => response.json())
+            .then((data) => {
+                let html = `<div>
+                            <h5>Sin datos</h5>
+                        </div>`
+                if (data) {
+                    html = data.map((element, index) => {
+                        return (
+                            ` <div class="col-sm col-4" style="margin-top:13px !important">
+                                <div class="card " style="width: 15rem;border-color: orange;">
+                                    <img class="card-img-top" src="${element.foto}" style="width:160px ;height:160px ;"
+                                        alt="Card image cap" style="display: block;  margin-left: auto;  margin-right: auto;  width: 50%;">
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <h5>${element.nombre} </h5> <h6>precio: $ ${element.precio}</h6>
+                                        </div>
+
+                                        <p class="card-text">${element.descripcion}</p>
+                                        <button type="button" class="btn btn-primary" onclick="removeProductCarrito('${element.id}','${id}')">Eliminar del carrito</button>
+                                    </div>
+                                </div>
+                            </div>`
+                        )
+                    }).join(" ");
+                }
+                document.getElementById("datosProductos").innerHTML = html
+            });
+    }
+
+    function removeProductCarrito(id_pro, id) {
+        fetch(`http://localhost:8080/api/carrito/${id}/productos/${id_pro}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => {
+                render()
+                alert(`${response}`)
+            })
+    }
+
+
+</script>
