@@ -21,17 +21,16 @@
     $("#formSave").submit(function (e) {
         e.preventDefault();
         var data = {
+            "id": 0,
             "nombre": $("input[name='nombre']").val(),
-            "precio": $("input[name='precio']").val(),
+            "precio": parseInt($("input[name='precio']").val()),
             "timestamp": $("input[name='foto']").val(),
             "foto": Date.now,
             "descripcion": $("input[name='descripcion']").val(),
             "codigo": $("input[name='codigo']").val(),
             "stock": true,
             "foto": $("input[name='foto']").val(),
-            "id": 0
         }
-
         let admin = sessionStorage.getItem("admin")
         fetch('http://localhost:8080/api/productos', {
             method: 'POST',
@@ -45,26 +44,31 @@
 
     $("#formUpdate").submit(function (e) {
         e.preventDefault();
-        var data = {
-            "id": parseInt($("input[name='id']").val()),
-            "nombre": $("input[name='nombre']").val(),
-            "precio":parseInt( $("input[name='precio']").val()),
-            "timestamp": $("input[name='foto']").val(),
-            "foto": Date.now,
-            "descripcion": $("input[name='descripcion']").val(),
-            "codigo": $("input[name='codigo']").val(),
-            "stock": true,
-            "foto": $("input[name='foto']").val(),
-        }
         let admin = sessionStorage.getItem("admin")
-        fetch('http://localhost:8080/api/productos', {
-            method: 'PUT',
-            body: JSON.stringify(data),
-            headers: { 'Content-Type': 'application/json', 'AdminMode': admin },
-        })
-            .then(response => response.json())
-            .catch(error => console.error('Error:', error))
-            .then(response => { window.location = "http://localhost:8080/cargados"; alert(`Producto actualizado`); });
+        if ('true' == admin) {
+            var data = {
+                "id": parseInt($("input[name='id']").val()),
+                "nombre": $("input[name='nombre']").val(),
+                "precio": parseInt($("input[name='precio']").val()),
+                "timestamp": $("input[name='foto']").val(),
+                "foto": Date.now,
+                "descripcion": $("input[name='descripcion']").val(),
+                "codigo": $("input[name='codigo']").val(),
+                "stock": true,
+                "foto": $("input[name='foto']").val(),
+            }
+            fetch('http://localhost:8080/api/productos', {
+                method: 'PUT',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json', 'AdminMode': admin },
+            })
+                .then(response => response.json())
+                .catch(error => console.error('Error:', error))
+                .then(response => { window.location = "http://localhost:8080/cargados"; alert(`Producto actualizado`); });
+
+        } else {
+            alert('Por favor active el modo admin')
+        }
     });
 
     function render() {
@@ -142,7 +146,7 @@
         })
             .then(response => response.json())
             .catch(error => console.error('Error:', error))
-            .then(response => alert(`${response}`))
+            .then(response => alert(`Producto agregado al carrito`))
     }
 
     async function AdminMode() {
@@ -153,10 +157,10 @@
             admin = 'true' == admin
             admin = !admin
         }
-        console.log(admin)
 
         sessionStorage.setItem("admin", admin)
         render();
+        validarAdminn()
 
     }
 
@@ -175,5 +179,19 @@
 
         let admin = sessionStorage.getItem("admin")
         window.location = `http://localhost:8080/actualizar/${id_pro}`
+    }
+
+    async function validarAdminn() {
+        debugger;
+        let admin = sessionStorage.getItem("admin")
+        if (admin = 'true' == admin) {
+            $("#navAdmin").removeClass("fail");
+            $("#navAdmin").addClass("success");
+
+        } else {
+            $("#navAdmin").removeClass("success");
+            $("#navAdmin").addClass("fail");
+
+        }
     }
 </script>
