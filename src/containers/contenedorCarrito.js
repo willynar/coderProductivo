@@ -3,8 +3,8 @@ class ContenedorCarrito {
     constructor(nombreArchivo) {
         this.nombreArchivo = nombreArchivo
         this.extencion = '.txt'
-        this.ruta="./src/persistance/"
-        this.rutaCompleta=`${this.ruta}${this.nombreArchivo}${this.extencion}`
+        this.ruta = "./persistance/"
+        this.rutaCompleta = `${this.ruta}${this.nombreArchivo}${this.extencion}`
         if (!fs.existsSync(`${this.rutaCompleta}`)) {
             fs.createWriteStream(`${this.rutaCompleta}`, 'utf-8')
             // fs.write(`${this.rutaCompleta}`, JSON.stringify([]))
@@ -52,7 +52,7 @@ class ContenedorCarrito {
                 if (result) {
                     let array = JSON.parse(result)
                     array.forEach(x => {
-                        if (x.id == id) {
+                        if (x.id == parseInt(id)) {
                             objet = x
                         }
                     })
@@ -77,7 +77,7 @@ class ContenedorCarrito {
                 if (result) {
                     let array = JSON.parse(result)
                     array.forEach(x => {
-                        if (x.id == id) {
+                        if (x.id == parseInt(id)) {
                             objet = x
                         }
                     })
@@ -99,7 +99,7 @@ class ContenedorCarrito {
         let objet
         return new Promise(async (resolve, reject) => {
             let array = await this.getAll()
-            let objeto = array.find(x => x.id === objectUpd.id)
+            let objeto = array.find(x => x.id === parseInt(objectUpd.id))
             //se valida que el ojeto exista
             const index = array.indexOf(objeto);
             if (index > -1) {
@@ -137,7 +137,7 @@ class ContenedorCarrito {
     async deleteById(id) {
         return new Promise(async (resolve, reject) => {
             let array = await this.getAll()
-            let objeto = array.find(x => x.id === id)
+            let objeto = array.find(x => x.id === parseInt(id))
             //se valida que el ojeto exista
             const index = array.indexOf(objeto);
             if (index > -1) {
@@ -154,16 +154,16 @@ class ContenedorCarrito {
         })
     }
 
-    async deleteByIdProducto(id,id_prod) {
+    async deleteByIdProducto(id, id_prod) {
         return new Promise(async (resolve, reject) => {
             let array = await this.getAll()
 
-            let objeto = array.find(x => x.id === id)
+            let objeto = array.find(x => x.id === parseInt(id))
             //se valida que el ojeto exista
             const index = array.indexOf(objeto);
             if (index > -1) {
 
-                let producto = array[index].carrito.find(x => x.id === id_prod)
+                let producto = array[index].carrito.find(x => x.id === parseInt(id_prod))
                 const indexProducto = array[index].carrito.indexOf(producto);
                 array[index].carrito.splice(indexProducto, 1)
                 try {
@@ -180,4 +180,4 @@ class ContenedorCarrito {
 
 }
 
-export default ContenedorCarrito
+export { ContenedorCarrito }

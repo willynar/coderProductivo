@@ -6,8 +6,7 @@ import { fileURLToPath } from 'url';
 import productos from './routes/productos.js'
 import carritos from './routes/carrito.js'
 import vistasHandlebars from './routes/Views.js'
-import socketsAPP from './logic/sockets.js'
-
+import socketsAPP from './containers/contenedorSockets.js'
 
 const app = express()
 const httpServer = new http.createServer(app)
@@ -42,7 +41,7 @@ app.engine('hbs',
 
 
 app.set('view engine', 'hbs')
-app.set('views', './src/views')
+app.set('views', './views')
 
 app.use(express.static(__dirname + '/public'))
 

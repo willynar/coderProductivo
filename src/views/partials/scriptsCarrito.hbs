@@ -26,7 +26,12 @@
                             <h5>Sin datos</h5>
                         </div>`
                 if (data) {
+                    console.log(JSON.stringify(data));
                     html = data.map((element, index) => {
+                        if (element.id == undefined) {
+
+                            element.id = element._id;
+                        }
                         return (
                             ` <div class="col-sm col-4" style="margin-top:13px !important">
                                 <div class="card " style="width: 15rem;border-color: orange;">

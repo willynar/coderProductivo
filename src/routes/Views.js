@@ -1,3 +1,4 @@
+import { Console } from 'console'
 import express from 'express'
 import http from 'http'
 const router = express.Router()
@@ -17,8 +18,10 @@ router.get('/carritoView/', async (req, res) => {
 })
 
 router.get('/actualizar/:id_pro', async (req, res) => {
-    let http_promise = getPromiseProduct(parseInt(req.params.id_pro),)
-    res.render('main', { layout: 'actualizar', data: await http_promise })
+    let http_promise = getPromiseProduct(req.params.id_pro,)
+    let dat = await http_promise;
+    dat.id = req.params.id_pro;
+    res.render('main', { layout: 'actualizar', data: dat })
 })
 
 async function getPromiseProduct(id_pro) {
@@ -37,7 +40,7 @@ async function getPromiseProduct(id_pro) {
             });
         });
     });
-    
+
 }
 
 

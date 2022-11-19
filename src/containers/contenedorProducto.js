@@ -1,9 +1,9 @@
 import fs from 'fs';
-class Contenedor {
+class ContenedorProductos {
     constructor(nombreArchivo) {
         this.nombreArchivo = nombreArchivo
         this.extencion = '.txt'
-        this.ruta = "./src/persistance/"
+        this.ruta = "./persistance/"
         this.rutaCompleta = `${this.ruta}${this.nombreArchivo}${this.extencion}`
         fs.createWriteStream(`${this.rutaCompleta}`, 'utf-8')
     }
@@ -47,7 +47,7 @@ class Contenedor {
                 if (result) {
                     let array = JSON.parse(result)
                     array.forEach(x => {
-                        if (x.id == id) {
+                        if (x.id == parseInt(id)) {
                             objet = x
                         }
                     })
@@ -88,7 +88,7 @@ class Contenedor {
             let array = await this.getAll()
             console.log(array)
             console.log(objectUpd)
-            let objeto = array.find(x => x.id === objectUpd.id)
+            let objeto = array.find(x => x.id === parseInt(objectUpd.id))
             //se valida que el ojeto exista
             const index = array.indexOf(objeto);
             if (index > -1) {
@@ -116,7 +116,7 @@ class Contenedor {
     async deleteById(id) {
         return new Promise(async (resolve, reject) => {
             let array = await this.getAll()
-            let objeto = array.find(x => x.id === id)
+            let objeto = array.find(x => x.id === parseInt(id))
             //se valida que el ojeto exista
             const index = array.indexOf(objeto);
             if (index > -1) {
@@ -146,4 +146,4 @@ class Contenedor {
 
 }
 
-export default Contenedor
+export {ContenedorProductos}

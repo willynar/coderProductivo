@@ -17,6 +17,7 @@
 
 <script type="application/javascript">
     render();
+    crearIdLocalCarrito();
     sessionStorage.setItem("admin", false)
     $("#formSave").submit(function (e) {
         e.preventDefault();
@@ -47,7 +48,7 @@
         let admin = sessionStorage.getItem("admin")
         if ('true' == admin) {
             var data = {
-                "id": parseInt($("input[name='id']").val()),
+                "id": $("input[name='id']").val(),
                 "nombre": $("input[name='nombre']").val(),
                 "precio": parseInt($("input[name='precio']").val()),
                 "timestamp": $("input[name='foto']").val(),
@@ -89,7 +90,7 @@
                             admin = 'true' == admin
                             let htmladmin = '';
                             if (admin) {
-                                htmladmin = `<button type="button" class="btn btn-danger mt-3" onclick="deleteProduct('${element.id}')">Eliminar a carrito</button><button type="button" class="btn btn-warning mt-3" onclick="updateProduct('${element.id} ')">Actualizar a carrito</button>`
+                                htmladmin = `<button type="button" class="btn btn-danger mt-3" onclick="deleteProduct('${element.id}')">Eliminar producto</button><button type="button" class="btn btn-warning mt-3" onclick="updateProduct('${element.id} ')">Actualizar</button>`
                             }
                             return (
                                 ` <div class="col-sm col-4" style="margin-top:13px !important">
@@ -119,8 +120,7 @@
     function crearIdLocalCarrito() {
 
         let id = sessionStorage.getItem("idCarrito")
-        if (id == null) {
-            console.log(id)
+        if (id == null || id == undefined) {
             fetch('http://localhost:8080/api/carrito', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -128,6 +128,7 @@
                 .then(response => response.json())
                 .catch(error => console.error('Error:', error))
                 .then(response => {
+                    console.log(response)
                     sessionStorage.setItem("idCarrito", response)
                 });
         }
@@ -136,17 +137,17 @@
     async function addProductCarrito(id_pro) {
         crearIdLocalCarrito()
         let id = sessionStorage.getItem("idCarrito")
+
         const response = await fetch(`http://localhost:8080/api/productos/${id_pro}`);
         let producto = await response.json();
-
-        fetch(`http://localhost:8080/api/carrito/${id}/productos`, {
-            method: 'POST',
-            body: JSON.stringify(producto),
-            headers: { 'Content-Type': 'application/json' },
-        })
-            .then(response => response.json())
-            .catch(error => console.error('Error:', error))
-            .then(response => alert(`Producto agregado al carrito`))
+                fetch(`http://localhost:8080/api/carrito/${id}/productos`, {
+                    method: 'POST',
+                    body: JSON.stringify(producto),
+                    headers: { 'Content-Type': 'application/json' },
+                })
+                    .then(response => response.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => alert(`Producto agregado al carrito`))
     }
 
     async function AdminMode() {
@@ -182,7 +183,6 @@
     }
 
     async function validarAdminn() {
-        debugger;
         let admin = sessionStorage.getItem("admin")
         if (admin = 'true' == admin) {
             $("#navAdmin").removeClass("fail");
