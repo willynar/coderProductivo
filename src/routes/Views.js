@@ -1,49 +1,65 @@
-import { Console } from 'console'
 import express from 'express'
-import http from 'http'
 const router = express.Router()
+import { options } from "../config/appConfig.js";
 
-router.get('/', async (req, res) => {
+import { ContenedorDaoProductos } from "../daos/index.js";
+const productosApi = ContenedorDaoProductos;
+
+const myLogger = function (req, res, next) {
+    console.log(req.session.passport)
+    if (req.session.passport !== undefined) {
+        next()
+    } else {
+        res.redirect("/login-user")
+    }
+}
+
+router.get('/', myLogger, async (req, res) => {
     res.render('main', { layout: 'guardar' })
 })
 
-router.get('/cargados/', async (req, res) => {
+router.get('/home', myLogger, async (req, res) => {
+    res.render('main', { layout: 'index' })
+})
+
+router.get('/cargados/', myLogger, async (req, res) => {
 
     res.render('main', { layout: 'productos' })
 })
 
-router.get('/carritoView/', async (req, res) => {
+router.get('/carritoView/', myLogger, async (req, res) => {
 
     res.render('main', { layout: 'carrito' })
 })
 
-router.get('/actualizar/:id_pro', async (req, res) => {
-    let http_promise = getPromiseProduct(req.params.id_pro,)
-    let dat = await http_promise;
+router.get('/actualizar/:id_pro',myLogger, async (req, res) => {
+    let dat = await productosApi.getById(req.params.id_pro);
     dat.id = req.params.id_pro;
     res.render('main', { layout: 'actualizar', data: dat })
 })
 
-async function getPromiseProduct(id_pro) {
-    return new Promise((resolve, reject) => {
-        http.get(`http://localhost:8080/api/productos/${id_pro}`, (response) => {
-            let chunks_of_data = [];
-            response.on('data', (fragments) => {
-                chunks_of_data.push(fragments);
-            });
-            response.on('end', () => {
-                let response_body = Buffer.concat(chunks_of_data);
-                resolve(JSON.parse(response_body));
-            });
-            response.on('error', (error) => {
-                reject(error);
-            });
-        });
-    });
+router.get('/info', myLogger, async (req, res) => {
+    res.render('main', { layout: 'info', objeto: options.infoApp })
+})
 
-}
+router.get('/login-user', async (req, res) => {
+    res.render('main', { layout: 'login' })
+})
 
+router.get('/registro', async (req, res) => {
+    res.render('main', { layout: 'singup' })
+})
 
+router.get('/bye/', async (req, res) => {
+    res.render('main', { layout: 'bye' })
+})
+
+router.get('/erroPage', async (req, res) => {
+    let erroMesage = req.session.messages ? req.session.messages[0] : ''
+    res.render('main', { layout: 'error', error: erroMesage })
+    req.session.messages = [];
+
+})
 
 
 

@@ -1,0 +1,17 @@
+<div id="salida"></div>
+<script>
+  let usuario = sessionStorage.getItem("usuario")
+  if (usuario != null) {
+
+    let html = '<h1>Hasta Luego' + usuario + '</h1>'
+    document.getElementById("salida").innerHTML += html
+    sessionStorage.clear()
+
+    setTimeout(function () {
+      window.location.href = `http://${location.host}/login-user`;
+      return;
+    }, 4000);
+  } else {
+    window.location.href = `http://${location.host}/`;
+  }
+</script>

@@ -1,0 +1,29 @@
+{{> headers}}
+{{> navegador}}
+<br>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Argumentos de Entrada</th>
+            <th scope="col">Process Id</th>
+            <th scope="col">Path de ejecucion</th>
+            <th scope="col">Nombre de la plataforma</th>
+            <th scope="col">Version Node</th>
+            <th scope="col">Carpeta del Proyecto</th>
+            <th scope="col">Memoria total</th>
+            <th scope="col">Numero Procesadores</th>
+        </tr>
+    </thead>
+        <tr>
+            <th scope="row">{{objeto.id}}</th>
+            <th scope="row">{{objeto.processId}}</th>
+            <td scope="row">{{objeto.path}}</td>
+            <td scope="row">{{objeto.SO}}</td>
+            <td scope="row">{{objeto.nodeVersion}}</td>
+            <td scope="row">{{objeto.pathApp}}</td>
+            <td scope="row">{{objeto.memory}}</td>
+            <td scope="row">{{objeto.procesors}}</td>
+        </tr>
+    </tbody>
+</table>
+{{> scripts}}

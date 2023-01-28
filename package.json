@@ -5,9 +5,19 @@
   "main": "src/index.js",
   "type": "module",
   "scripts": {
-    "test": "node .",
-    "start": "node .",
-    "build": "webpack"
+    "test": "node index.js",
+    "build": "babel src/server.js -o index.js",
+    "start": "babel-node index.js",
+    "node-fork": "node src/server.js",
+    "node-cluster": "node src/server.js -p 8081 -m CLUSTER --prof",
+    "pm2-fork": "pm2 start index.js -p 8081",
+    "pm2-cluster": "pm2 start index.js -p 8081 -i 0",
+    "nginx-node-cluster": "node src/server.js -p 8081 -m CLUSTER",
+    "nginx-node-fork": "node src/server.js -p 8080",
+    "artilleryfork": "artillery quick --count 50 -n 40 http://localhost:8080/api/randoms/500 > result_fork.txt",
+    "artilleryCluster": "artillery quick --count 50 -n 40 http://localhost:8080/api/randoms/500 > result_cluster.txt",
+    "decodificarFork": "node --prof bloq-v8.log >  result_fork.txt",
+    "decodificarCluster": "node --prof bloq-v8.log >  result_cluster.txt"
   },
   "repository": {
     "type": "git",
@@ -27,17 +37,38 @@
   },
   "homepage": "https://github.com/willynar/coderProductivo#readme",
   "dependencies": {
-    "express": "^4.18.1",
+    "@faker-js/faker": "^7.6.0",
+    "babel-preset-env": "^1.7.0",
+    "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
+    "connect-mongo": "^4.6.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
     "express-handlebars": "^6.0.6",
+    "express-session": "^1.17.3",
+    "faker": "^5.5.3",
     "handlebars-loader": "^1.7.2",
-    "mongoose": "^6.7.2",
+    "log4js": "^6.7.1",
+    "minimist": "^1.2.7",
+    "mongoose": "^6.7.3",
+    "normalizr": "^3.6.2",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "request": "^2.88.2",
+    "session-file-store": "^1.5.0",
     "socket.io": "^4.5.3",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.20.7",
+    "@babel/core": "^7.20.12",
+    "@babel/node": "^7.20.7",
     "@babel/plugin-transform-runtime": "^7.19.6",
+    "@babel/preset-env": "^7.20.2",
+    "babel-cli": "^6.26.0",
+    "babel-eslint": "^10.1.0",
     "ts-loader": "^9.4.1"
   }
 }

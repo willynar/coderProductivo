@@ -1,6 +1,48 @@
-<nav class="nav nav-pills flex-column flex-sm-row">
-  <a class="flex-sm-fill text-sm-center nav-link" href="/">Guardar Productos</a>
-  <a class="flex-sm-fill text-sm-center nav-link" href="/cargados">Productos Cargados </a>
-  <a class="flex-sm-fill text-sm-center nav-link" href="/carritoView">Carrito</a>
-  <button class="flex-sm-fill text-sm-center nav-link" id="navAdmin" onclick="AdminMode()">Enanble/disamble Admin</button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/home">Navbar</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto" id="navegadorid">
+      <li class="nav-item">
+        <a class="flex-sm-fill text-sm-center nav-link" href="/">Guardar Productos</a>
+      </li>
+      <li class="nav-item">
+        <a class="flex-sm-fill text-sm-center nav-link" href="/cargados">Productos Cargados </a>
+      </li>
+      <li class="nav-item">
+        <a class="flex-sm-fill text-sm-center nav-link" href="/carritoView">Carrito</a>
+      </li>
+      <li class="nav-item">
+        <button class="flex-sm-fill text-sm-center nav-link bg-dark " style="border: none;" id="navAdmin"
+          onclick="AdminMode()">Enanble/disamble
+          Admin</button>
+      </li>
+      <li class="nav-item">
+        <a class="flex-sm-fill text-sm-center nav-link" href="/info">Info</a>
+      </li>
+    </ul>
+  </div>
 </nav>
+
+
+
+<script>
+  let usuario = sessionStorage.getItem("usuario")
+  let avatar = sessionStorage.getItem("avatar")
+  if (usuario) {
+    let html =
+      '<img style="width: 50px;border-radius: 25px;" src="' + avatar + '">' +
+      ' <li class="nav-item dropdown">' +
+      '<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + usuario + '</a>' +
+      '<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+      '<a class="dropdown-item" href="/logout">Logout</a>' +
+      '<div class="dropdown-divider"></div>' +
+      '</div>' +
+      '</li>'
+    document.getElementById("navegadorid").innerHTML += html
+  }
+</script>
