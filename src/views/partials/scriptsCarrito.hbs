@@ -22,7 +22,6 @@
                             <h5>Sin datos</h5>
                         </div>`
                 if (data) {
-                    console.log(JSON.stringify(data));
                     html = data.map((element, index) => {
                         if (element.id == undefined) {
 
@@ -105,5 +104,20 @@
         sessionStorage.setItem("admin", admin)
         validarAdminn()
 
+    }
+
+    function BuyProducts() {
+        let id = sessionStorage.getItem("idCarrito");
+        let idUsuario = sessionStorage.getItem("idUsuario");
+         fetch(`http://localhost:8080/api/carrito/${id}/comprar/${idUsuario}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        })
+            .then(response => response.json())
+            .catch(error => console.error('Error:', error))
+            .then(response => {
+                render()
+                alert(`${response.descripcion}`)
+            })
     }
 </script>

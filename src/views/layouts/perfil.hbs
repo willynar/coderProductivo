@@ -1,0 +1,38 @@
+{{> headers}}
+{{> navegador}}
+<br>
+<div class="d-flex aling-center justify-content-center">
+    <table class="table" style="width: 400px;" border="solid 1px gray">
+        <tbody>
+            {{#each objeto}}
+            {{#if this.name}}
+            <tr>
+                <th>nombre</th>
+                <td scope="row">{{this.name}}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td scope="row">{{this.username}}</td>
+            </tr>
+            <tr>
+                <th>Direccion</th>
+                <td scope="row">{{this.address}}</td>
+            </tr>
+            <tr>
+                <th>Edad</th>
+                <td scope="row">{{this.age}}</td>
+            </tr>
+            <tr>
+                <th>Celular</th>
+                <td scope="row">{{this.phone}}</td>
+            </tr>
+            <tr>
+                <th>Avatar</th>
+                <td scope="row">{{this.url}}</td>
+            </tr>
+            {{/if}}
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+{{> scripts}}

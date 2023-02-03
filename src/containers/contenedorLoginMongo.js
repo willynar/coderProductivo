@@ -33,6 +33,11 @@ class ContenedorLoginMongo {
         const result = await this.model.findOne({ _id: id })
         return result.username
     }
+
+    async getAllById(id) {
+        const result = await this.model.findOne({ _id: id })
+        return result
+    }
 }
 
 export { ContenedorLoginMongo }

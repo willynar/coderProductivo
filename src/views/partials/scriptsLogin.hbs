@@ -23,7 +23,7 @@
             .then(response => response.json())
             .catch(error => console.error('Error:', error))
             .then(response => {
-                console.log(response._id)
+                console.log(response)
                 alert(`${response != null ? "Bienvenido " + data.username + "" : "Datos de usuario incorectos"}`)
                 if (response != null) {
                     sessionStorage.setItem("idUsuario", response._id)

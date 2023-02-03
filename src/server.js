@@ -22,6 +22,9 @@ import cluster from 'cluster'
 import { logger } from './config/logger.js'
 import compression from 'compression'
 import handlebars from 'express-handlebars'
+import {ContenedorDaoEmails} from "./daos/index.js";
+const emailApi = ContenedorDaoEmails;
+
 
 // obtener argumentos  inicialea
 const optionsArgv = {
@@ -146,7 +149,7 @@ passport.use("signupStrategy",
                 if (error) return done(error, null, { message: "Hubo un error" });
                 if (userFound) return done(null, userFound, { message: "El usuario ya existe" });
                 //guardamos el usuario en la db
-                
+
                 const newUser = {
                     name: req.body.name,
                     username: username,
@@ -157,8 +160,13 @@ passport.use("signupStrategy",
                     phone: req.body.phone,
                     url: req.body.url
                 };
-                loginModel.create(newUser, (error, userCreated) => {
-                    if (error) return done(error, null, { message: "Hubo un error al registrar el usuario" })
+                loginModel.create(newUser, async (error, userCreated) => {
+                    if (error) {
+                        return done(error, null, { message: "Hubo un error al registrar el usuario" })
+                    } else {
+                        //aqui el correo
+                       await emailApi.enviarCorreoRegistro(newUser);
+                    }
                     return done(null, userCreated);
                 })
             })

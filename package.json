@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "node index.js",
-    "build": "babel src/server.js -o index.js",
+    "build": "babel ./src/server.js -o ./index.js",
     "start": "babel-node index.js",
     "node-fork": "node src/server.js",
     "node-cluster": "node src/server.js -p 8081 -m CLUSTER --prof",
@@ -38,7 +38,6 @@
   "homepage": "https://github.com/willynar/coderProductivo#readme",
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
-    "babel-preset-env": "^1.7.0",
     "bcrypt": "^5.1.0",
     "compression": "^1.7.4",
     "connect-mongo": "^4.6.0",
@@ -52,12 +51,14 @@
     "log4js": "^6.7.1",
     "minimist": "^1.2.7",
     "mongoose": "^6.7.3",
+    "nodemailer": "^6.9.1",
     "normalizr": "^3.6.2",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "request": "^2.88.2",
     "session-file-store": "^1.5.0",
     "socket.io": "^4.5.3",
+    "twilio": "^3.84.1",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"
   },
@@ -69,6 +70,7 @@
     "@babel/preset-env": "^7.20.2",
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.1.0",
+    "babel-preset-env": "^1.7.0",
     "ts-loader": "^9.4.1"
   }
 }

@@ -9,6 +9,8 @@ let databaseType = "mongo";
 let ContenedorDaoProductos;
 let ContenedorDaoCarritos;
 let ContenedorDaoLogins;
+let ContenedorDaoEmails;
+let ContenedorDaoWhatsap;
 
 
 switch (databaseType) {
@@ -19,6 +21,7 @@ switch (databaseType) {
         ContenedorDaoProductos = new productosDaoArchivos(options.fileSystem.pathProducts);
         ContenedorDaoCarritos = new carritosDaoArchivos(options.fileSystem.pathCarts);
         // ContenedorDaoLogins = new loginDaoArchivos(options.fileSystem.pathLogin);
+
         break;
     case "sql":
         // const {ProductosDaoSQL} = await import("./products/productsSql.js");
@@ -37,10 +40,14 @@ switch (databaseType) {
         const { productosDaoMongo } = await import("./productos/productosDaoMongo.js");
         const { carritosDaoMongo } = await import("./carritos/carritosDaoMongo.js");
         const { loginDaoMongo } = await import("./login/loginDaoMongo.js");
+        const { emailGmail } = await import("./email/emailGmail.js");
+        const { whatsappTwilio } = await import("./whatsap/whatsappTwilio.js");
         ContenedorDaoProductos = new productosDaoMongo(productosModel);
         ContenedorDaoCarritos = new carritosDaoMongo(carritosModel);
         ContenedorDaoLogins = new loginDaoMongo(loginModel);
+        ContenedorDaoEmails = new emailGmail(options.trasporterEmail);
+        ContenedorDaoWhatsap = new whatsappTwilio(options.twilio);
         break;
 }
 
-export { ContenedorDaoProductos, ContenedorDaoCarritos, ContenedorDaoLogins }
+export { ContenedorDaoProductos, ContenedorDaoCarritos, ContenedorDaoLogins, ContenedorDaoEmails, ContenedorDaoWhatsap }

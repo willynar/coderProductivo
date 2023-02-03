@@ -2,11 +2,11 @@ import express from 'express'
 const router = express.Router()
 import { options } from "../config/appConfig.js";
 
-import { ContenedorDaoProductos } from "../daos/index.js";
+import { ContenedorDaoProductos,ContenedorDaoLogins } from "../daos/index.js";
 const productosApi = ContenedorDaoProductos;
+const userApi = ContenedorDaoLogins;
 
 const myLogger = function (req, res, next) {
-    console.log(req.session.passport)
     if (req.session.passport !== undefined) {
         next()
     } else {
@@ -36,6 +36,11 @@ router.get('/actualizar/:id_pro',myLogger, async (req, res) => {
     let dat = await productosApi.getById(req.params.id_pro);
     dat.id = req.params.id_pro;
     res.render('main', { layout: 'actualizar', data: dat })
+})
+
+router.get('/perfil/:id',myLogger, async (req, res) => {
+    let dat = await userApi.getAllById(req.params.id);
+    res.render('main', { layout: 'perfil', objeto: dat })
 })
 
 router.get('/info', myLogger, async (req, res) => {
