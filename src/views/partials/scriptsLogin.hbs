@@ -15,7 +15,7 @@
             "username": $("input[name='username']").val(),
             "password": $("input[name='password']").val(),
         }
-        fetch(`http://${location.host}/login`, {
+        fetch(`http://${location.host}/api/login`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'application/json' },

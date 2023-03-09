@@ -33,7 +33,10 @@
         })
             .then(response => response.json())
             .catch(error => console.error('Error:', error))
-            .then(response => alert(`Producto guardado`));
+            .then(response => {
+                alert(`Producto guardado`)
+                $("#formSave")[0].reset();
+                });
     });
 
     $("#formUpdate").submit(function (e) {

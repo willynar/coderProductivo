@@ -1,8 +1,8 @@
 import { options } from "../config/appConfig.js";
 import mongoose from "mongoose";
-import productosModel from "../config/models/productos.js";
-import carritosModel from "../config/models/carritos.js";
-import loginModel from "../config/models/login.js";
+import productosModel from "./models/productos.js";
+import carritosModel from "./models/carritos.js";
+import loginModel from "./models/login.js";
 //identificador
 let databaseType = "mongo";
 
@@ -15,8 +15,8 @@ let ContenedorDaoWhatsap;
 
 switch (databaseType) {
     case "archivos":
-        const { productosDaoArchivos } = await import("./productos/productosDao.js");
-        const { carritosDaoArchivos } = await import("./carritos/carritosDao.js");
+        const { productosDaoArchivos } = await import("./daos/productos/productosDao.js");
+        const { carritosDaoArchivos } = await import("./daos/carritos/carritosDao.js");
         // const { loginDaoArchivos } = await import("./login/loginDao.js");
         ContenedorDaoProductos = new productosDaoArchivos(options.fileSystem.pathProducts);
         ContenedorDaoCarritos = new carritosDaoArchivos(options.fileSystem.pathCarts);
@@ -37,11 +37,11 @@ switch (databaseType) {
             if (error) throw new Error(`connection failed ${error}`);
             console.log("conexion exitosa")
         })
-        const { productosDaoMongo } = await import("./productos/productosDaoMongo.js");
-        const { carritosDaoMongo } = await import("./carritos/carritosDaoMongo.js");
-        const { loginDaoMongo } = await import("./login/loginDaoMongo.js");
-        const { emailGmail } = await import("./email/emailGmail.js");
-        const { whatsappTwilio } = await import("./whatsap/whatsappTwilio.js");
+        const { productosDaoMongo } = await import("./daos/productos/productosDaoMongo.js");
+        const { carritosDaoMongo } = await import("./daos/carritos/carritosDaoMongo.js");
+        const { loginDaoMongo } = await import("./daos/login/loginDaoMongo.js");
+        const { emailGmail } = await import("./daos/email/emailGmail.js");
+        const { whatsappTwilio } = await import("./daos/whatsap/whatsappTwilio.js");
         ContenedorDaoProductos = new productosDaoMongo(productosModel);
         ContenedorDaoCarritos = new carritosDaoMongo(carritosModel);
         ContenedorDaoLogins = new loginDaoMongo(loginModel);

@@ -1,4 +1,4 @@
-import { ContenedorWhatsapp } from "../../containers/contenedorWhatsapp.js";
+import { ContenedorWhatsapp } from "../../managers/twilioManagerWhatsapp.js";
 //crear una subclases de carritos  que trabaje con el contendor Archivos
 class whatsappTwilio extends ContenedorWhatsapp{
     constructor(options){

@@ -2,18 +2,18 @@ import express from 'express';
 import * as http from 'http';
 import * as socketIo from 'socket.io';
 import path from 'path';
-import productos from './routes/productos.js'
-import carritos from './routes/carrito.js'
-import login from './routes/login.js'
-import logout from './routes/logout.js'
+import productos from './routes/api/productos.js'
+import carritos from './routes/api/carrito.js'
+import login from './routes/api/login.js'
+import logout from './routes/api/logout.js'
 import vistasHandlebars from './routes/Views.js'
-import socketsAPP from './containers/contenedorSockets.js'
+import socketsAPP from './dbOperations/managers/socketsManagerProducto.js'
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import loginModel from "./config/models/login.js"
+import loginModel from "./dbOperations/models/login.js"
 import mongoose from "mongoose"
 import { options } from "./config/appConfig.js";
 import bcrypt from "bcrypt";
@@ -22,7 +22,7 @@ import cluster from 'cluster'
 import { logger } from './config/logger.js'
 import compression from 'compression'
 import handlebars from 'express-handlebars'
-import {ContenedorDaoEmails} from "./daos/index.js";
+import {ContenedorDaoEmails} from "./dbOperations/index.js";
 const emailApi = ContenedorDaoEmails;
 
 
@@ -65,7 +65,6 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(async function (err, req, res, next) {
     logger.error(err.stack)
-    // res.status(500).send('Something broke!')
     res.status(500).json({ error: error.status, descripcion: `ruta ${port}/${urlArray[0]} metodo ${req.originalUrl} no implementada` })
 })
 
@@ -95,9 +94,9 @@ if (modo === 'CLUSTER' && cluster.isPrimary) {
 } else {
     httpServer.listen(PORT, async () => {
         logger.trace(`Servidor Http escuchando en el puerto ${httpServer.address().port} on process ${process.pid}`)
-        // await productos.InicializarProductos()
+        // await productos.productosController.InicializarProductos()
         // await chats.InicializarChat()
-        await login.InicializarLogin()
+        await login.loginController.InicializarLogin()
     })
 
     httpServer.on('error', error => logger.error(`Error en servidor ${error}`))
@@ -187,8 +186,8 @@ const logUrlsInfo = function (req, res, next) {
 app.use(compression())
 app.use('/api/productos', logUrlsInfo, productos.router)
 app.use('/api/carrito', logUrlsInfo, carritos.router)
-app.use('/login', logUrlsInfo, login.router)
-app.use('/logout', logUrlsInfo, logout.router)
+app.use('/api/login', logUrlsInfo, login.router)
+app.use('/api/logout', logUrlsInfo, logout.router)
 app.use('/', logUrlsInfo, vistasHandlebars.router)
 
 //rutas no implementadas

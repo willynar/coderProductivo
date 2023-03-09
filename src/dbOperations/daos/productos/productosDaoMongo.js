@@ -1,4 +1,4 @@
-import { ContenedorProductoMongo } from "../../containers/contenedorProductoMongo.js";
+import { ContenedorProductoMongo } from "../../managers/mongoManagerProducto.js";
 
 //crear una subclases de carritos  que trabaje con el contendor Archivos
 class productosDaoMongo extends ContenedorProductoMongo{

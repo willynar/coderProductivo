@@ -1,11 +1,11 @@
-import { ContenedorCarrito } from "../../containers/contenedorCarrito.js";
+import { ContenedorProductos } from "../../managers/fileManagerProducto.js";
 
 //crear una subclases de carritos  que trabaje con el contendor Archivos
-class carritosDaoArchivos extends ContenedorCarrito{
+class productosDaoArchivos extends ContenedorProductos{
     constructor(filename){
         //ejecutamos el contructor de clase ContenedorArchivo
         super(filename);
     }
 }
 
-export {carritosDaoArchivos}
+export {productosDaoArchivos}

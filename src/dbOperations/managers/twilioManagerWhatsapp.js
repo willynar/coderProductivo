@@ -1,5 +1,5 @@
 import twilio from 'twilio'
-import { logger } from '../config/logger.js';
+import { logger } from '../../config/logger.js';
 
 class ContenedorWhatsapp {
     constructor(model) {

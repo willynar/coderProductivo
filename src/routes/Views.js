@@ -2,7 +2,7 @@ import express from 'express'
 const router = express.Router()
 import { options } from "../config/appConfig.js";
 
-import { ContenedorDaoProductos,ContenedorDaoLogins } from "../daos/index.js";
+import { ContenedorDaoProductos,ContenedorDaoLogins } from "../dbOperations/index.js";
 const productosApi = ContenedorDaoProductos;
 const userApi = ContenedorDaoLogins;
 
