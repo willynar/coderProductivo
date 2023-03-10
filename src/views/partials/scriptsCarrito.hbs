@@ -14,7 +14,7 @@
     sessionStorage.setItem("admin", false)
     function render() {
         let id = sessionStorage.getItem("idCarrito")
-        fetch(`api/carrito/${id}/productos`)
+        fetch(`http://localhost:8080/api/carrito/${id}/productos`)
             // Converting received data to JSON
             .then((response) => response.json())
             .then((data) => {

@@ -1,9 +1,10 @@
+{{> headers}}
 <div id="salida"></div>
 <script>
   let usuario = sessionStorage.getItem("usuario")
   if (usuario != null) {
 
-    let html = '<h1>Hasta Luego' + usuario + '</h1>'
+    let html = '<div class="d-flex justify-content-center align-items-center"><h1>Hasta Luego  ' + usuario + '</h1></div>'
     document.getElementById("salida").innerHTML += html
     sessionStorage.clear()
 
@@ -15,3 +16,4 @@
     window.location.href = `http://${location.host}/`;
   }
 </script>
+{{> scripts}}

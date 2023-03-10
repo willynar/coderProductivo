@@ -33,7 +33,7 @@ export const getByIdProductos = async (req, res) => {
 
 export const saveProductos = async (req, res) => {
     try {
-        const response = await carritosService.saveProductos({ id: req.params.id, producto: req.body });
+        const response = await carritosService.saveProductos(req.params.id, req.body);
         res.status(200).json(response)
     } catch (error) {
         logger.error(error)

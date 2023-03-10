@@ -2,27 +2,33 @@ import express from 'express';
 import * as http from 'http';
 import * as socketIo from 'socket.io';
 import path from 'path';
-import productos from './routes/api/productos.js'
-import carritos from './routes/api/carrito.js'
-import login from './routes/api/login.js'
-import logout from './routes/api/logout.js'
-import vistasHandlebars from './routes/Views.js'
-import socketsAPP from './dbOperations/managers/socketsManagerProducto.js'
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
-import loginModel from "./dbOperations/models/login.js"
 import mongoose from "mongoose"
-import { options } from "./config/appConfig.js";
 import bcrypt from "bcrypt";
 import parseArgs from 'minimist';
 import cluster from 'cluster'
-import { logger } from './config/logger.js'
 import compression from 'compression'
 import handlebars from 'express-handlebars'
+
+
+import loginModel from "./dbOperations/models/login.js"
+import { options } from "./config/appConfig.js";
+import { logger } from './config/logger.js'
 import {ContenedorDaoEmails} from "./dbOperations/index.js";
+import carritos from './routes/api/carrito.js'
+import login from './routes/api/login.js'
+import logout from './routes/api/logout.js'
+import vistasHandlebars from './routes/Views.js'
+import socketsAPP from './dbOperations/managers/socketsManagerProducto.js'
+import productos from './routes/api/productos.js'
+import chats from './routes/api/chat.routes.js'
+import socketsAPPChat from './dbOperations/managers/socketsManagerChat.js'
+
+
 const emailApi = ContenedorDaoEmails;
 
 
@@ -184,6 +190,7 @@ const logUrlsInfo = function (req, res, next) {
 }
 
 app.use(compression())
+app.use('/api/chat', logUrlsInfo, chats.router)
 app.use('/api/productos', logUrlsInfo, productos.router)
 app.use('/api/carrito', logUrlsInfo, carritos.router)
 app.use('/api/login', logUrlsInfo, login.router)

@@ -28,7 +28,6 @@ router.get('/cargados/', myLogger, async (req, res) => {
 })
 
 router.get('/carritoView/', myLogger, async (req, res) => {
-
     res.render('main', { layout: 'carrito' })
 })
 
@@ -42,6 +41,11 @@ router.get('/perfil/:id',myLogger, async (req, res) => {
     let dat = await userApi.getAllById(req.params.id);
     res.render('main', { layout: 'perfil', objeto: dat })
 })
+
+router.get('/chat/', myLogger, async (req, res) => {
+    res.render('main', { layout: 'chat' })
+})
+
 
 router.get('/info', myLogger, async (req, res) => {
     res.render('main', { layout: 'info', objeto: options.infoApp })

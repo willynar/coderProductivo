@@ -11,7 +11,7 @@ export const getAll = async () => {
     return await productosApi.getAll();
 }
 
-export const getById = async (id) => {
+export const getByIdProductos = async (id) => {
     return await carritosApi.getByIdProductos(id);
 }
 
@@ -23,8 +23,8 @@ export const saveProductos = async (id, body) => {
     return await carritosApi.saveProductos({ id: id, producto: body })
 }
 
-export const deleteByIdProducto = async (id,id_prod) => {
-    return await carritosApi.deleteByIdProducto(id,id_prod);
+export const deleteByIdProducto = async (id, id_prod) => {
+    return await carritosApi.deleteByIdProducto(id, id_prod);
 }
 
 export const deleteById = async (id) => {
@@ -32,11 +32,15 @@ export const deleteById = async (id) => {
 }
 
 
-export const comprar = async (id,id_user) => {
-    let carrito = await carritosApi.getByIdProductos(id);
-    let usuario = await userApi.getAllById(id_user);
+export const comprar = async (id, id_user) => {
+    try {
+        let carrito = await carritosApi.getByIdProductos(id);
+        let usuario = await userApi.getAllById(id_user);
 
-    correoApi.enviarCorreoCompraCarrito(carrito, usuario);
-    whatsappApi.enviarWhatsappCompra(carrito, usuario);
-    return { descripcion: `!Pedido: ${id}. realizado¡` }
+        correoApi.enviarCorreoCompraCarrito(carrito, usuario);
+        whatsappApi.enviarWhatsappCompra(carrito, usuario);
+        return { descripcion: `!Pedido: ${id}. realizado¡` }
+    } catch (err) {
+        throw new Error(`Ocurrio un error: ${err}`);
+    }
 }

@@ -25,7 +25,7 @@ export const getAll = async (req, res) => {
 
 export const getById = async (req, res) => {
     try {
-        const response = await productosService.getById(parseInt(req.params.id));
+        const response = await productosService.getById(req.params.id);
         res.status(200).json(response)
     } catch (error) {
         logger.error(error)
@@ -55,7 +55,7 @@ export const updateById = async (req, res) => {
 
 export const deleteById = async (req, res) => {
     try {
-        const response = await productosService.deleteById(parseInt(req.params.id));
+        const response = await productosService.deleteById(req.params.id);
         res.status(200).json(response)
     } catch (error) {
         logger.error(error)

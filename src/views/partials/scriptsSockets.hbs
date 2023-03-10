@@ -1,0 +1,64 @@
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
+
+<script type="application/javascript">
+    var socket = io();
+
+    const authorSchema = new normalizr.schema.Entity("authors", {}, { idAttribute: "email" })
+    const messageSchema = new normalizr.schema.Entity("messages", { author: authorSchema }, {})
+    const chatSchema = new normalizr.schema.Entity("chat", { messages: [messageSchema] }, { idAttribute: "id" })
+    socket.on('chat', function (data) {
+        const normalData = normalizr.denormalize(data.data.result, chatSchema, data.data.entities)
+        RenderChat(normalData)
+    })
+
+    function RenderChat(data) {
+        let html = `<tr>
+                        <td colspan="5">Sin datos</td>
+                    </tr>`
+        if (data.messages) {
+            html = data.messages.map((element, index) => {
+                var d = new Date(element.date)
+                return (
+                    `<tr>
+                        <th scope="row">${element.id}</th>
+                        <td style="color:blue;font-weight: bold;">${element.author.email}</td>
+                        <td style="color:maroon">[${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}]</td>
+                        <td style="font-family: italic;color: green;" colspan="2">: ${element.text} <img src="${element.author.avatar}" alt="" style="width:30px ;"></td>
+                    </tr>`
+                )
+            }).join(" ");
+        }
+        document.getElementById("DatosTablaChat").innerHTML = html
+    }
+
+    function addChat(e) {
+        const author = {
+            email: document.getElementsByName('email')[0].value,
+            nombre: document.getElementsByName('nombre')[0].value,
+            apellido: document.getElementsByName('apellido')[0].value,
+            edad: parseInt(document.getElementsByName('edad')[0].value),
+            alias: document.getElementsByName('alias')[0].value,
+            avatar: document.getElementsByName('avatar')[0].value,
+
+        }
+        const producto = {
+            id: 0,
+            author: author,
+            text: document.getElementsByName('message')[0].value,
+            date: new Date(),
+        }
+        socket.emit('nuevosChats', producto)
+        return false;
+    }
+
+</script>

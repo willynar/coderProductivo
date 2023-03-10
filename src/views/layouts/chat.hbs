@@ -1,0 +1,64 @@
+{{> headers}}
+{{> navegador}}
+<br>
+<div class="d-flex justify-content-center">
+    <h5 class="center">Chat</h5>
+
+</div>
+<br>
+<div class="d-flex justify-content-center"
+    style="display: flex;justify-content: center;justify-content: center;align-items: center;">
+    <form action="" onsubmit="return addChat(this)" autocomplete="on" id="formSave" style="min-width: 600px;">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="exampleInputPassword1">Mail</label>
+                <input type="mail" class="form-control" name="email" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="exampleInputPassword1">Nombre</label>
+                <input type="text" class="form-control" name="nombre" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="exampleInputPassword1">Apellido</label>
+                <input type="text" class="form-control" name="apellido" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="exampleInputPassword1">Edad</label>
+                <input type="number" class="form-control" name="edad" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="exampleInputPassword1">Alias</label>
+                <input type="text" class="form-control" name="alias" required>
+            </div>
+            <div class="form-group col-md-4">
+                <label for="exampleInputPassword1">Avatar</label>
+                <input type="text" class="form-control" name="avatar" required>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-12">
+                <label for="exampleInputPassword1">Mensaje</label>
+                <input type="text" class="form-control" name="message">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+<br>
+<div class="d-flex justify-content-center ">
+    <div class="table-responsive-sm border border-secondary" style="margin: 0 10% 0 10%;min-width: 900px; ">
+        <table class="table table-borderless">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Usuario</th>
+                    <th scope="col">Hora</th>
+                    <th scope="col" colspan="2">Mensaje</th>
+                </tr>
+            </thead>
+            <tbody id="DatosTablaChat">
+            </tbody>
+        </table>
+    </div>
+</div>
+{{> scriptsSockets}}
