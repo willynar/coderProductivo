@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 import os from 'os'
 import parseArgs from 'minimist';
+import { createTransport } from 'nodeMailer';
 
 
 // para  nginx y local

@@ -1,6 +1,4 @@
 import { logger } from '../../config/logger.js'
-import { createTransport } from 'nodeMailer';
-
 
 class ContenedorEmail {
     constructor(trasporterEmail) {
