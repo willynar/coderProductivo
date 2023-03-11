@@ -47,7 +47,7 @@ switch (databaseType) {
         ContenedorDaoLogins = new loginDaoMongo(loginModel);
         const { emailGmail } = await import("./daos/email/emailGmail.js");
         const { whatsappTwilio } = await import("./daos/whatsap/whatsappTwilioDao.js");
-        ContenedorDaoEmails = new emailGmail(options.trasporterEmail);
+        ContenedorDaoEmails = new emailGmail();
         ContenedorDaoWhatsap = new whatsappTwilio(options.twilio);
         break;
 }

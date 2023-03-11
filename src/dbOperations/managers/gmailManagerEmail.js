@@ -1,11 +1,23 @@
 import { logger } from '../../config/logger.js'
+import { createTransport } from 'nodeMailer';
+const trasporterEmail = createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+        user: "wjnaranjo@misena.edu.co",
+        pass: "uaxyruvrmigfwhpr"
+    },
+    secure: false,
+    tls: {
+        rejectUnauthorized: false
+    }
+});
 
 class ContenedorEmail {
-    constructor(trasporterEmail) {
-        this.trasporterEmail = trasporterEmail
+    constructor() {
     }
     async enviarCorreoRegistro(objetonuevo) {
-        this.trasporterEmail.sendMail({
+        trasporterEmail.sendMail({
             from: "Server admin",
             to: "wjnaranjo@misena.edu.co",
             subject: "Nuevo registro",
@@ -22,7 +34,7 @@ class ContenedorEmail {
     }
 
     async enviarCorreoCompraCarrito(carrito, usuario) {
-        let textoMensaje =`Los siguientes productos fueron solicitados: \n`;
+        let textoMensaje = `Los siguientes productos fueron solicitados: \n`;
         let total = 0;
         carrito.forEach(element => {
             textoMensaje += `producto solicitado ${element.nombre}. precio: ${element.precio} descripcion: ${element.descripcion} \n`;
@@ -30,7 +42,7 @@ class ContenedorEmail {
         });
         textoMensaje += `Total: ${total} \n`
 
-        this.trasporterEmail.sendMail({
+        trasporterEmail.sendMail({
             from: "Server admin",
             to: usuario.username,
             subject: `Nuevo depido de: ${usuario.name}, ${usuario.username}`,
