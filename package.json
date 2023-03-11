@@ -7,7 +7,7 @@
   "scripts": {
     "test": "mocha src/test/productos.test.js",
     "starNode": "node ./src/server.js",
-    "start": "babel-node index.js",
+    "start": "node ./src/server.js",
     "node-fork": "node src/server.js",
     "node-cluster": "node src/server.js -p 8081 -m CLUSTER --prof",
     "pm2-fork": "pm2 start index.js -p 8081",
