@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha src/test/productos.test.js",
-    "starNode": "node ./src/index.js",
-    "build": "babel ./src/server.js -o ./index.js",
+    "starNode": "node ./src/server.js",
     "start": "babel-node index.js",
     "node-fork": "node src/server.js",
     "node-cluster": "node src/server.js -p 8081 -m CLUSTER --prof",
