@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "mocha src/test/productos.test.js",
-    "build": "npm install nodemailer --save",
+    "build": "npm install nodemailer --save --production --omit=dev",
     "starNode": "node ./src/server.js",
     "start": "node ./src/server.js",
     "node-fork": "node src/server.js",
