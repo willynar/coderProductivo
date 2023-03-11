@@ -1,9 +1,9 @@
-import { options } from "../config/appConfig.js";
+import { options } from "../config/app.Config.js";
 import mongoose from "mongoose";
-import productosModel from "./models/productos.js";
-import carritosModel from "./models/carritos.js";
-import loginModel from "./models/login.js";
-import chatModel from "../dbOperations/models/chat.js";
+import productosModel from "./models/productos.model.js";
+import carritosModel from "./models/carritos.model.js";
+import loginModel from "./models/login.model.js";
+import chatModel from "../dbOperations/models/chat.model.js";
 
 //identificador
 let databaseType = "mongo";

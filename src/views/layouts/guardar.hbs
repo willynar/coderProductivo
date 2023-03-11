@@ -1,37 +1,49 @@
 {{> headers}}
 {{> navegador}}
 <br>
-<div style="display: flex;justify-content: center;justify-content: center;align-items: center;">
-    <form action="" method="POST" autocomplete="on" id="formSave">
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="exampleInputPassword1">Producto</label>
-                <input type="text" class="form-control" name="nombre">
+<div class="d-flex justify-content-center">
+    <h5 class="center">Productos</h5>
+</div>
+<div class="d-flex justify-content-center">
+    <p>Para guardar activar modo admin</p>
+</div>
+<div style="width: 100%;height: 80%;display: flex;justify-content: center;">
+    <div
+        style="display: flex;justify-content: center;justify-content: center;align-items: center;margin-top:50px;margin-bottom:200px;padding: 20px;border: 1px solid #e5e5e5;border-radius: 25px;">
+        <form action="" method="POST" autocomplete="on" id="formSave">
+            <div class="bg-primary" style="width: 100%;height:30px;border-radius: 25px;">
+                <h5 style="color: white;text-align: center;">Guardar producto</h5>
             </div>
-            <div class="form-group col-md-6">
-                <label for="exampleInputPassword1">precio</label>
-                <input type="number" class="form-control" name="precio">
+            <br>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="exampleInputPassword1">Producto</label>
+                    <input type="text" class="form-control" name="nombre">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="exampleInputPassword1">precio</label>
+                    <input type="number" class="form-control" name="precio">
+                </div>
             </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="exampleInputPassword1">Descripcion</label>
-                <input type="text" class="form-control" name="descripcion">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="exampleInputPassword1">Descripcion</label>
+                    <input type="text" class="form-control" name="descripcion">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="exampleInputPassword1">Codigo</label>
+                    <input type="text" class="form-control" name="codigo">
+                </div>
             </div>
-            <div class="form-group col-md-6">
-                <label for="exampleInputPassword1">Codigo</label>
-                <input type="text" class="form-control" name="codigo">
-            </div>
-        </div>
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="exampleInputPassword1">Imagen</label>
-                <input type="text" class="form-control" name="foto">
-            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="exampleInputPassword1">Imagen</label>
+                    <input type="text" class="form-control" name="foto">
+                </div>
 
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar Nuevo</button>
-    </form>
+            </div>
+            <button type="submit" class="btn btn-primary">Guardar Nuevo</button>
+        </form>
+    </div>
 </div>
 {{> scripts}}
-

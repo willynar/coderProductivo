@@ -86,7 +86,8 @@
                             admin = 'true' == admin
                             let htmladmin = '';
                             if (admin) {
-                                htmladmin = `<button type="button" class="btn btn-danger mt-3" onclick="deleteProduct('${element.id}')">Eliminar producto</button><button type="button" class="btn btn-warning mt-3" onclick="updateProduct('${element.id} ')">Actualizar</button>`
+                                htmladmin = `<button type="button" class="btn btn-danger mt-3" onclick="deleteProduct('${element.id}')">Eliminar producto</button>` +
+                                    `<button type="button" class="btn btn-warning mt-3" onclick="updateProduct('${element.id} ')">Actualizar</button>`
                             }
                             return (
                                 ` <div class="col-sm col-4" style="margin-top:13px !important">

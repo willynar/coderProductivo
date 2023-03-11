@@ -4,12 +4,16 @@ import dotenv from 'dotenv';
 dotenv.config()
 import os from 'os'
 import { createTransport } from 'nodeMailer';
+import parseArgs from 'minimist';
 
+
+// para  nginx y local
 const __filename = fileURLToPath(import.meta.url);
+// para babel 
+// const __filename = process.argv[1];
 const __dirname = path.dirname(__filename);
-
 dotenv.config({
-    path: path.resolve(__dirname, 'dataConfig.env')
+    path: path.resolve(__dirname, 'data.Config.env')
 })
 
 export const options = {
@@ -76,6 +80,16 @@ export const options = {
         twilioAdminPhone: process.env.phoneTwilio,
         accountId: process.env.sidTwilio,
         authToken: process.env.tokenTwilio,
-        phoneTwilioWhatsapp:process.env.phoneTwilioWhatsapp
-    }
+        phoneTwilioWhatsapp: process.env.phoneTwilioWhatsapp
+    },
+    objArguments: parseArgs(process.argv.slice(2), {
+        alias: {
+            m: 'mode',
+            p: 'port'
+        },
+        default: {
+            mode: 'FORK',
+            port: 8080
+        }
+    })
 }

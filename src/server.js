@@ -9,55 +9,36 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import mongoose from "mongoose"
 import bcrypt from "bcrypt";
-import parseArgs from 'minimist';
 import cluster from 'cluster'
 import compression from 'compression'
 import handlebars from 'express-handlebars'
 
 
-import loginModel from "./dbOperations/models/login.js"
-import { options } from "./config/appConfig.js";
+import loginModel from "./dbOperations/models/login.model.js"
+import { options } from "./config/app.Config.js";
 import { logger } from './config/logger.js'
 import {ContenedorDaoEmails} from "./dbOperations/index.js";
-import carritos from './routes/api/carrito.js'
-import login from './routes/api/login.js'
-import logout from './routes/api/logout.js'
-import vistasHandlebars from './routes/Views.js'
+import carritos from './routes/api/carrito.routes.js'
+import login from './routes/api/login.routes.js'
+import logout from './routes/api/logout.routes.js'
+import vistasHandlebars from './routes/view.routes.js'
 import socketsAPP from './dbOperations/managers/socketsManagerProducto.js'
-import productos from './routes/api/productos.js'
+import productos from './routes/api/productos.routes.js'
 import chats from './routes/api/chat.routes.js'
 import socketsAPPChat from './dbOperations/managers/socketsManagerChat.js'
 
 
 const emailApi = ContenedorDaoEmails;
 
-
-// obtener argumentos  inicialea
-const optionsArgv = {
-    alias: {
-        m: 'mode',
-        p: 'port'
-    },
-    default: {
-        mode: 'FORK',
-        port: 8080
-    }
-}
-
-const objArguments = parseArgs(process.argv.slice(2), optionsArgv)
-const modo = objArguments.mode
-const PORT = objArguments.port
-
-logger.warn('modo', modo, 'PORT', PORT)
+logger.warn('modo', options.objArguments.mode, 'PORT', options.objArguments.port)
 
 const app = express()
 const httpServer = new http.createServer(app)
 const io = new socketIo.Server(httpServer)
 
-// para  nginx
+// para  nginx y local
 // const __filename = fileURLToPath(import.meta.url);
-// para babel
-// const __filename = fileURLToPath(process.argv[1]);
+// para babel 
 const __filename = process.argv[1];
 const __dirname = path.dirname(__filename);
 
@@ -71,7 +52,7 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(async function (err, req, res, next) {
     logger.error(err.stack)
-    res.status(500).json({ error: error.status, descripcion: `ruta ${port}/${urlArray[0]} metodo ${req.originalUrl} no implementada` })
+    res.status(500).json({ error: error.status, descripcion: `ruta ${options.objArguments.port}/${urlArray[0]} metodo ${req.originalUrl} no implementada` })
 })
 
 app.engine('hbs',
@@ -90,7 +71,7 @@ app.use(express.static(__dirname + '/public'))
 
 app.set('socketio', io);
 
-if (modo === 'CLUSTER' && cluster.isPrimary) {
+if (options.objArguments.mode === 'CLUSTER' && cluster.isPrimary) {
     for (let index = 0; index < options.infoApp.procesors; index++) {
         cluster.fork();
     }
@@ -98,10 +79,8 @@ if (modo === 'CLUSTER' && cluster.isPrimary) {
         logger.error(`el subproceso ${worker.process.pid} fallo`)
     })
 } else {
-    httpServer.listen(PORT, async () => {
+    httpServer.listen(options.objArguments.port, async () => {
         logger.trace(`Servidor Http escuchando en el puerto ${httpServer.address().port} on process ${process.pid}`)
-        // await productos.productosController.InicializarProductos()
-        // await chats.InicializarChat()
         await login.loginController.InicializarLogin()
     })
 

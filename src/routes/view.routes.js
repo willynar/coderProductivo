@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-import { options } from "../config/appConfig.js";
+import { options } from "../config/app.Config.js";
 
 import { ContenedorDaoProductos,ContenedorDaoLogins } from "../dbOperations/index.js";
 const productosApi = ContenedorDaoProductos;
