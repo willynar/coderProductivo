@@ -20,6 +20,7 @@ export const options = {
     fileSystem: {
         pathProducts: process.env.pathProducts,
         pathChats: process.env.pathChats,
+        pathCarts: process.env.pathCarts,
         pathLogins: process.env.pathLogins
     },
     firebase: {

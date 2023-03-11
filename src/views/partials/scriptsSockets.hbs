@@ -11,11 +11,12 @@
 <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
 
 <script type="application/javascript">
+    //se inicializan los websockets
     var socket = io();
-
     const authorSchema = new normalizr.schema.Entity("authors", {}, { idAttribute: "email" })
     const messageSchema = new normalizr.schema.Entity("messages", { author: authorSchema }, {})
     const chatSchema = new normalizr.schema.Entity("chat", { messages: [messageSchema] }, { idAttribute: "id" })
+    
     socket.on('chat', function (data) {
         const normalData = normalizr.denormalize(data.data.result, chatSchema, data.data.entities)
         RenderChat(normalData)
@@ -25,6 +26,7 @@
         let html = `<tr>
                         <td colspan="5">Sin datos</td>
                     </tr>`
+        //se valida si existen mensajes
         if (data.messages) {
             html = data.messages.map((element, index) => {
                 var d = new Date(element.date)

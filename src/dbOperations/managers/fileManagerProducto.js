@@ -3,7 +3,7 @@ class ContenedorProductos {
     constructor(nombreArchivo) {
         this.nombreArchivo = nombreArchivo
         this.extencion = '.txt'
-        this.ruta = "./persistance/"
+        this.ruta = "./src/persistance/"
         this.rutaCompleta = `${this.ruta}${this.nombreArchivo}${this.extencion}`
         fs.createWriteStream(`${this.rutaCompleta}`, 'utf-8')
     }

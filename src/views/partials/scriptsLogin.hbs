@@ -9,6 +9,7 @@
     crossorigin="anonymous"></script>
 
 <script type="application/javascript">
+    //funcion para relizar login de usuario
     $("#formLogin").submit(function (e) {
         e.preventDefault();
         var data = {
@@ -26,10 +27,14 @@
                 console.log(response)
                 alert(`${response != null ? "Bienvenido " + data.username + "" : "Datos de usuario incorectos"}`)
                 if (response != null) {
+                    //se establecen las variables de session 
                     sessionStorage.setItem("idUsuario", response._id)
                     sessionStorage.setItem("usuario", data.username)
                     sessionStorage.setItem("avatar", response.url)
-                    window.location.href = `http://${location.host}/`;
+                    setTimeout(function () {
+                        //se redirige a la pagina de inicio
+                        window.location.href = `http://${location.host}/`;
+                    }, 2000);
                 }
             });
 

@@ -79,6 +79,7 @@
         }
     }
 
+    //se valida si existen activas las sessiones de administrador
     async function validarAdminn() {
         let admin = sessionStorage.getItem("admin")
         if (admin = 'true' == admin) {
@@ -92,6 +93,7 @@
         }
     }
 
+    //fucnion  para activar el modo administrador
     async function AdminMode() {
         let admin = sessionStorage.getItem("admin")
         if (admin == null) {
@@ -106,10 +108,11 @@
 
     }
 
+    //funcion para realizar pedido de compra carrito
     function BuyProducts() {
         let id = sessionStorage.getItem("idCarrito");
         let idUsuario = sessionStorage.getItem("idUsuario");
-         fetch(`http://localhost:8080/api/carrito/${id}/comprar/${idUsuario}`, {
+        fetch(`http://localhost:8080/api/carrito/${id}/comprar/${idUsuario}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })

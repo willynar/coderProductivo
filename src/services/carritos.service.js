@@ -40,7 +40,8 @@ export const comprar = async (id, id_user) => {
         correoApi.enviarCorreoCompraCarrito(carrito, usuario);
         whatsappApi.enviarWhatsappCompra(carrito, usuario);
         return { descripcion: `!Pedido: ${id}. realizado¡` }
-    } catch (err) {
-        throw new Error(`Ocurrio un error: ${err}`);
+    } catch (error) {
+        logger.error(error);
+        throw new Error(`Ocurrio un error: ${error}`);
     }
 }

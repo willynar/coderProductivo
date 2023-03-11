@@ -3,6 +3,7 @@ import * as productosController from '../../controllers/productos.controller.js'
 
 const router = express.Router()
 
+//midewre para no actualizar guardar o borrar si no es admin
 const myLogger = function (req, res, next) {
     let admin = req.header('AdminMode') == 'true'
     if (admin) {

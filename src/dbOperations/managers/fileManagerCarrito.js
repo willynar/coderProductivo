@@ -3,11 +3,8 @@ class ContenedorCarrito {
     constructor(nombreArchivo) {
         this.nombreArchivo = nombreArchivo
         this.extencion = '.txt'
-        this.ruta = "./persistance/"
-        this.rutaCompleta = `${this.ruta}${this.nombreArchivo}${this.extencion}`
-        if (!fs.existsSync(`${this.rutaCompleta}`)) {
-            fs.createWriteStream(`${this.rutaCompleta}`, 'utf-8')
-            // fs.write(`${this.rutaCompleta}`, JSON.stringify([]))
+        if (!fs.existsSync(`./src/persistance/${this.nombreArchivo}${this.extencion}`)) {
+            fs.createWriteStream(`./src/persistance/${this.nombreArchivo}${this.extencion}`, 'utf-8')
         }
     }
 

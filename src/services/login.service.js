@@ -12,3 +12,7 @@ export const getById = async (id) => {
 export const getLogin = async (body) => {
     return await LoginApi.getLogin(body);
 }
+
+export const getAllById = async (id) => {
+    return await LoginApi.getAllById(id);
+}

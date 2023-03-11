@@ -12,6 +12,7 @@
     render();
     crearIdLocalCarrito();
     sessionStorage.setItem("admin", false)
+    //funcion para crear nuevo producto
     $("#formSave").submit(function (e) {
         e.preventDefault();
         var data = {
@@ -39,6 +40,7 @@
             });
     });
 
+    //funcion para actualizar produtos
     $("#formUpdate").submit(function (e) {
         e.preventDefault();
         let admin = sessionStorage.getItem("admin")
@@ -113,7 +115,7 @@
         }
 
     }
-
+    //fincoion para  generar nueva session de carrito de compra
     function crearIdLocalCarrito() {
 
         let id = sessionStorage.getItem("idCarrito")

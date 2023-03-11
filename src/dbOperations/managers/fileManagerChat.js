@@ -3,15 +3,15 @@ class ContenedorChat {
     constructor(nombreArchivo) {
         this.nombreArchivo = nombreArchivo
         this.extencion = '.txt'
-        if (!fs.existsSync(`./persinstance/${this.nombreArchivo}${this.extencion}`)) {
-            fs.createWriteStream(`./persinstance/${this.nombreArchivo}${this.extencion}`, 'utf-8')
+        if (!fs.existsSync(`./src/persistance/${this.nombreArchivo}${this.extencion}`)) {
+            fs.createWriteStream(`./src/persistance/${this.nombreArchivo}${this.extencion}`, 'utf-8')
         }
     }
 
     async save(objet) {
-        if (fs.existsSync(`./persinstance/${this.nombreArchivo}${this.extencion}`)) {
+        if (fs.existsSync(`./src/persistance/${this.nombreArchivo}${this.extencion}`)) {
             let array = []
-            await fs.promises.readFile(`./persinstance/${this.nombreArchivo}${this.extencion}`, 'utf-8')
+            await fs.promises.readFile(`./src/persistance/${this.nombreArchivo}${this.extencion}`, 'utf-8')
                 .then(async result => {
                     let ultimoId = 0;
                     //se valida si tiene contenido el archivo y convierte contenido a json array
@@ -26,7 +26,7 @@ class ContenedorChat {
                     objet.id = ++ultimoId;
                     array.push(objet)
                     try {
-                        await fs.promises.writeFile(`./persinstance/${this.nombreArchivo}${this.extencion}`, JSON.stringify(array))
+                        await fs.promises.writeFile(`./src/persistance/${this.nombreArchivo}${this.extencion}`, JSON.stringify(array))
                     } catch (err) {
                         reject(err)
                     }
@@ -42,7 +42,7 @@ class ContenedorChat {
 
     async getAll() {
         let array = []
-        await fs.promises.readFile(`./persinstance/${this.nombreArchivo}${this.extencion}`, 'utf-8')
+        await fs.promises.readFile(`./src/persistance/${this.nombreArchivo}${this.extencion}`, 'utf-8')
             .then(async result => {
                 //se valida que ayan datos
                 if (result) {

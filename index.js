@@ -5,27 +5,28 @@ var _express = _interopRequireDefault(require("express"));
 var http = _interopRequireWildcard(require("http"));
 var socketIo = _interopRequireWildcard(require("socket.io"));
 var _path = _interopRequireDefault(require("path"));
-var _productos = _interopRequireDefault(require("./routes/productos.js"));
-var _carrito = _interopRequireDefault(require("./routes/carrito.js"));
-var _login = _interopRequireDefault(require("./routes/login.js"));
-var _logout = _interopRequireDefault(require("./routes/logout.js"));
-var _Views = _interopRequireDefault(require("./routes/Views.js"));
-var _contenedorSockets = _interopRequireDefault(require("./containers/contenedorSockets.js"));
 var _cookieParser = _interopRequireDefault(require("cookie-parser"));
 var _expressSession = _interopRequireDefault(require("express-session"));
 var _connectMongo = _interopRequireDefault(require("connect-mongo"));
 var _passport = _interopRequireDefault(require("passport"));
 var _passportLocal = require("passport-local");
-var _login2 = _interopRequireDefault(require("./config/models/login.js"));
 var _mongoose = _interopRequireDefault(require("mongoose"));
-var _appConfig = require("./config/appConfig.js");
 var _bcrypt = _interopRequireDefault(require("bcrypt"));
-var _minimist = _interopRequireDefault(require("minimist"));
 var _cluster = _interopRequireDefault(require("cluster"));
-var _logger = require("./config/logger.js");
 var _compression = _interopRequireDefault(require("compression"));
 var _expressHandlebars = _interopRequireDefault(require("express-handlebars"));
-var _index = require("./daos/index.js");
+var _loginModel = _interopRequireDefault(require("./src/dbOperations/models/login.model.js"));
+var _appConfig = require("./src/config/app.Config.js");
+var _logger = require("./src/config/logger.js");
+var _index = require("./src/dbOperations/index.js");
+var _carritoRoutes = _interopRequireDefault(require("./src/routes/api/carrito.routes.js"));
+var _loginRoutes = _interopRequireDefault(require("./src/routes/api/login.routes.js"));
+var _logoutRoutes = _interopRequireDefault(require("./src/routes/api/logout.routes.js"));
+var _viewRoutes = _interopRequireDefault(require("./src/routes/view.routes.js"));
+var _socketsManagerProducto = _interopRequireDefault(require("./src/dbOperations/managers/socketsManagerProducto.js"));
+var _productosRoutes = _interopRequireDefault(require("./src/routes/api/productos.routes.js"));
+var _chatRoutes = _interopRequireDefault(require("./src/routes/api/chat.routes.js"));
+var _socketsManagerChat = _interopRequireDefault(require("./src/dbOperations/managers/socketsManagerChat.js"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { "default": obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj["default"] = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -34,31 +35,20 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 var emailApi = _index.ContenedorDaoEmails;
 
-// obtener argumentos  inicialea
-var optionsArgv = {
-  alias: {
-    m: 'mode',
-    p: 'port'
-  },
-  "default": {
-    mode: 'FORK',
-    port: 8080
-  }
-};
-var objArguments = (0, _minimist["default"])(process.argv.slice(2), optionsArgv);
-var modo = objArguments.mode;
-var PORT = objArguments.port;
-_logger.logger.warn('modo', modo, 'PORT', PORT);
+//se impre mensaje inicial comunicando el puerto y el modo de inicio
+_logger.logger.warn('modo', _appConfig.options.objArguments.mode, 'PORT', _appConfig.options.objArguments.port);
 var app = (0, _express["default"])();
 var httpServer = new http.createServer(app);
 var io = new socketIo.Server(httpServer);
+app.set('socketio', io);
 
-// para  nginx
+// para  nginx y local
 // const __filename = fileURLToPath(import.meta.url);
-// para babel
-// const __filename = fileURLToPath(process.argv[1]);
+// para babel 
 var _filename = process.argv[1];
 var _dirname = _path["default"].dirname(_filename);
+
+//se inicializa la coneccion con mongo
 _mongoose["default"].connect(_appConfig.options.MongoDB.Url, _appConfig.options.MongoDB.options, function (error) {
   if (error) throw new Error("connection failed ".concat(error));
   _logger.logger.info("conexion exitosa");
@@ -73,10 +63,9 @@ app.use( /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _logger.logger.error(err.stack);
-          // res.status(500).send('Something broke!')
           res.status(500).json({
             error: error.status,
-            descripcion: "ruta ".concat(port, "/").concat(urlArray[0], " metodo ").concat(req.originalUrl, " no implementada")
+            descripcion: "ruta ".concat(_appConfig.options.objArguments.port, "/").concat(urlArray[0], " metodo ").concat(req.originalUrl, " no implementada")
           });
         case 2:
         case "end":
@@ -88,6 +77,8 @@ app.use( /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }());
+
+//se inicializa la configuracion con hadlebars
 app.engine('hbs', _expressHandlebars["default"].engine({
   extname: '.hbs',
   defaultLayout: process.env.HBS_DEFAULT_LAYOUT,
@@ -96,9 +87,12 @@ app.engine('hbs', _expressHandlebars["default"].engine({
 }));
 app.set('view engine', 'hbs');
 app.set('views', "".concat(_dirname, "/views"));
+
+//se inicializa la persistencia de archivos publicos
 app.use(_express["default"]["static"](_dirname + '/public'));
-app.set('socketio', io);
-if (modo === 'CLUSTER' && _cluster["default"].isPrimary) {
+
+//se verifica el modo de inicio  cluser  o Fork y se inica el server
+if (_appConfig.options.objArguments.mode === 'CLUSTER' && _cluster["default"].isPrimary) {
   for (var index = 0; index < _appConfig.options.infoApp.procesors; index++) {
     _cluster["default"].fork();
   }
@@ -106,15 +100,13 @@ if (modo === 'CLUSTER' && _cluster["default"].isPrimary) {
     _logger.logger.error("el subproceso ".concat(worker.process.pid, " fallo"));
   });
 } else {
-  httpServer.listen(PORT, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+  httpServer.listen(_appConfig.options.objArguments.port, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           _logger.logger.trace("Servidor Http escuchando en el puerto ".concat(httpServer.address().port, " on process ").concat(process.pid));
-          // await productos.InicializarProductos()
-          // await chats.InicializarChat()
           _context2.next = 3;
-          return _login["default"].InicializarLogin();
+          return _loginRoutes["default"].loginController.InicializarLogin();
         case 3:
         case "end":
           return _context2.stop();
@@ -130,10 +122,10 @@ if (modo === 'CLUSTER' && _cluster["default"].isPrimary) {
         while (1) switch (_context3.prev = _context3.next) {
           case 0:
             _context3.next = 2;
-            return _contenedorSockets["default"].Inicializar(socket, io);
+            return _socketsManagerProducto["default"].Inicializar(socket, io);
           case 2:
             _context3.next = 4;
-            return socketsAPPChat.Inicializar(socket, io);
+            return _socketsManagerChat["default"].Inicializar(socket, io);
           case 4:
           case "end":
             return _context3.stop();
@@ -146,6 +138,8 @@ if (modo === 'CLUSTER' && _cluster["default"].isPrimary) {
   }());
 }
 app.use((0, _cookieParser["default"])());
+
+//se inicializa la coneccion mongo para las seesiones
 app.use((0, _expressSession["default"])({
   store: _connectMongo["default"].create({
     mongoUrl: _appConfig.options.MongoDB.UrlSession
@@ -163,7 +157,7 @@ _passport["default"].serializeUser(function (user, done) {
   done(null, user.id);
 });
 _passport["default"].deserializeUser(function (id, done) {
-  _login2["default"].findById(id, function (err, userFound) {
+  _loginModel["default"].findById(id, function (err, userFound) {
     if (err) return done(err);
     return done(null, userFound);
   });
@@ -172,13 +166,15 @@ var createHash = function createHash(password) {
   var hash = _bcrypt["default"].hashSync(password, _bcrypt["default"].genSalt(10));
   return hash;
 };
+
+//se inicializa la estrategia  de login y  registro
 _passport["default"].use("signupStrategy", new _passportLocal.Strategy({
   passReqToCallback: true,
   usernameField: "username"
 }, function (req, username, password, done) {
   //logica para registrar al usuaurio
   //verificar si el usuario exitse en db
-  _login2["default"].findOne({
+  _loginModel["default"].findOne({
     username: username
   }, function (error, userFound) {
     if (error) return done(error, null, {
@@ -199,7 +195,7 @@ _passport["default"].use("signupStrategy", new _passportLocal.Strategy({
       phone: req.body.phone,
       url: req.body.url
     };
-    _login2["default"].create(newUser, /*#__PURE__*/function () {
+    _loginModel["default"].create(newUser, /*#__PURE__*/function () {
       var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(error, userCreated) {
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
@@ -234,18 +230,23 @@ app.post("/singup", _passport["default"].authenticate("signupStrategy", {
 }), function (req, res) {
   res.redirect("/home");
 });
+
+//se inicializa midleware para inprimir todas las urs  alas que se acceda
 var logUrlsInfo = function logUrlsInfo(req, res, next) {
   _logger.logger.info("ruta /".concat(req.originalUrl, " . Metodo /").concat(req.method));
   next();
 };
 app.use((0, _compression["default"])());
-app.use('/api/productos', logUrlsInfo, _productos["default"].router);
-app.use('/api/carrito', logUrlsInfo, _carrito["default"].router);
-app.use('/login', logUrlsInfo, _login["default"].router);
-app.use('/logout', logUrlsInfo, _logout["default"].router);
-app.use('/', logUrlsInfo, _Views["default"].router);
 
-//rutas no implementadas
+//se inicializan los diferentes end points api
+app.use('/api/chat', logUrlsInfo, _chatRoutes["default"].router);
+app.use('/api/productos', logUrlsInfo, _productosRoutes["default"].router);
+app.use('/api/carrito', logUrlsInfo, _carritoRoutes["default"].router);
+app.use('/api/login', logUrlsInfo, _loginRoutes["default"].router);
+app.use('/api/logout', logUrlsInfo, _logoutRoutes["default"].router);
+app.use('/', logUrlsInfo, _viewRoutes["default"].router);
+
+//se capturan rutas no implementadas
 app.get('*', function (req, res) {
   _logger.logger.warn("ruta /".concat(req.originalUrl, " no implementada. Metodo /").concat(req.method));
   res.status(404).send(JSON.stringify({

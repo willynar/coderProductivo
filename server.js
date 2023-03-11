@@ -14,27 +14,29 @@ import compression from 'compression'
 import handlebars from 'express-handlebars'
 
 
-import loginModel from "./dbOperations/models/login.model.js"
-import { options } from "./config/app.Config.js";
-import { logger } from './config/logger.js'
-import {ContenedorDaoEmails} from "./dbOperations/index.js";
-import carritos from './routes/api/carrito.routes.js'
-import login from './routes/api/login.routes.js'
-import logout from './routes/api/logout.routes.js'
-import vistasHandlebars from './routes/view.routes.js'
-import socketsAPP from './dbOperations/managers/socketsManagerProducto.js'
-import productos from './routes/api/productos.routes.js'
-import chats from './routes/api/chat.routes.js'
-import socketsAPPChat from './dbOperations/managers/socketsManagerChat.js'
+import loginModel from "./src/dbOperations/models/login.model.js"
+import { options } from "./src/config/app.Config.js";
+import { logger } from './src/config/logger.js'
+import {ContenedorDaoEmails} from "./src/dbOperations/index.js";
+import carritos from './src/routes/api/carrito.routes.js'
+import login from './src/routes/api/login.routes.js'
+import logout from './src/routes/api/logout.routes.js'
+import vistasHandlebars from './src/routes/view.routes.js'
+import socketsAPP from './src/dbOperations/managers/socketsManagerProducto.js'
+import productos from './src/routes/api/productos.routes.js'
+import chats from './src/routes/api/chat.routes.js'
+import socketsAPPChat from './src/dbOperations/managers/socketsManagerChat.js'
 
 
 const emailApi = ContenedorDaoEmails;
 
+//se impre mensaje inicial comunicando el puerto y el modo de inicio
 logger.warn('modo', options.objArguments.mode, 'PORT', options.objArguments.port)
 
 const app = express()
 const httpServer = new http.createServer(app)
 const io = new socketIo.Server(httpServer)
+app.set('socketio', io);
 
 // para  nginx y local
 // const __filename = fileURLToPath(import.meta.url);
@@ -42,6 +44,7 @@ const io = new socketIo.Server(httpServer)
 const __filename = process.argv[1];
 const __dirname = path.dirname(__filename);
 
+//se inicializa la coneccion con mongo
 mongoose.connect(options.MongoDB.Url, options.MongoDB.options, error => {
     if (error) throw new Error(`connection failed ${error}`);
     logger.info("conexion exitosa")
@@ -55,6 +58,7 @@ app.use(async function (err, req, res, next) {
     res.status(500).json({ error: error.status, descripcion: `ruta ${options.objArguments.port}/${urlArray[0]} metodo ${req.originalUrl} no implementada` })
 })
 
+//se inicializa la configuracion con hadlebars
 app.engine('hbs',
     handlebars.engine({
         extname: '.hbs',
@@ -67,10 +71,10 @@ app.engine('hbs',
 app.set('view engine', 'hbs')
 app.set('views', `${__dirname}/views`);
 
+//se inicializa la persistencia de archivos publicos
 app.use(express.static(__dirname + '/public'))
 
-app.set('socketio', io);
-
+//se verifica el modo de inicio  cluser  o Fork y se inica el server
 if (options.objArguments.mode === 'CLUSTER' && cluster.isPrimary) {
     for (let index = 0; index < options.infoApp.procesors; index++) {
         cluster.fork();
@@ -94,6 +98,7 @@ if (options.objArguments.mode === 'CLUSTER' && cluster.isPrimary) {
 
 app.use(cookieParser());
 
+//se inicializa la coneccion mongo para las seesiones
 app.use(session({
     store: MongoStore.create({
         mongoUrl: options.MongoDB.UrlSession
@@ -123,6 +128,7 @@ const createHash = (password) => {
     return hash;
 }
 
+//se inicializa la estrategia  de login y  registro
 passport.use("signupStrategy",
     new LocalStrategy(
         { passReqToCallback: true, usernameField: "username" },
@@ -163,12 +169,15 @@ app.post("/singup", passport.authenticate("signupStrategy", {
     res.redirect("/home")
 })
 
+//se inicializa midleware para inprimir todas las urs  alas que se acceda
 const logUrlsInfo = function (req, res, next) {
     logger.info(`ruta /${req.originalUrl} . Metodo /${req.method}`)
     next()
 }
 
 app.use(compression())
+
+//se inicializan los diferentes end points api
 app.use('/api/chat', logUrlsInfo, chats.router)
 app.use('/api/productos', logUrlsInfo, productos.router)
 app.use('/api/carrito', logUrlsInfo, carritos.router)
@@ -176,7 +185,7 @@ app.use('/api/login', logUrlsInfo, login.router)
 app.use('/api/logout', logUrlsInfo, logout.router)
 app.use('/', logUrlsInfo, vistasHandlebars.router)
 
-//rutas no implementadas
+//se capturan rutas no implementadas
 app.get('*', function (req, res) {
     logger.warn(`ruta /${req.originalUrl} no implementada. Metodo /${req.method}`)
     res.status(404).send(JSON.stringify({ error: 404, descripcion: `ruta /${req.originalUrl} no implementada. Metodo /${req.method}` }));
