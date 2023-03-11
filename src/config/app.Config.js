@@ -15,6 +15,18 @@ const __dirname = path.dirname(__filename);
 dotenv.config({
     path: path.resolve(__dirname, 'data.Config.env')
 })
+const trasporterEmail = createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+        user: process.env.emailAdmin,
+        pass: process.env.passEmailAdmin
+    },
+    secure: false,
+    tls: {
+        rejectUnauthorized: false
+    }
+});
 
 export const options = {
     fileSystem: {
@@ -65,18 +77,7 @@ export const options = {
         memory: process.memoryUsage(),
         procesors: os.cpus().length
     },
-    trasporterEmail: createTransport({
-        host: "smtp.gmail.com",
-        port: 587,
-        auth: {
-            user: process.env.emailAdmin,
-            pass: process.env.passEmailAdmin
-        },
-        secure: false,
-        tls: {
-            rejectUnauthorized: false
-        }
-    }),
+    trasporterEmail: trasporterEmail,
     twilio: {
         twilioAdminPhone: process.env.phoneTwilio,
         accountId: process.env.sidTwilio,
