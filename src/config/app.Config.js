@@ -15,7 +15,21 @@ dotenv.config({
     path: path.resolve(__dirname, 'data.Config.env')
 })
 
+const trasporterEmail = createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    auth: {
+        user: process.env.emailAdmin,
+        pass: process.env.passEmailAdmin
+    },
+    secure: false,
+    tls: {
+        rejectUnauthorized: false
+    }
+});
+
 export const options = {
+    trasporterEmail:trasporterEmail,
     fileSystem: {
         pathProducts: process.env.pathProducts,
         pathChats: process.env.pathChats,

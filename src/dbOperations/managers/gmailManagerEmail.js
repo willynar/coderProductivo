@@ -1,23 +1,13 @@
 import { logger } from '../../config/logger.js'
 import { createTransport } from 'nodeMailer';
-const trasporterEmail = createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    auth: {
-        user: "wjnaranjo@misena.edu.co",
-        pass: "uaxyruvrmigfwhpr"
-    },
-    secure: false,
-    tls: {
-        rejectUnauthorized: false
-    }
-});
+
 
 class ContenedorEmail {
-    constructor() {
+    constructor(trasporterEmail) {
+        this.trasporterEmail = trasporterEmail;
     }
     async enviarCorreoRegistro(objetonuevo) {
-        trasporterEmail.sendMail({
+        this.trasporterEmail.sendMail({
             from: "Server admin",
             to: "wjnaranjo@misena.edu.co",
             subject: "Nuevo registro",
@@ -42,7 +32,7 @@ class ContenedorEmail {
         });
         textoMensaje += `Total: ${total} \n`
 
-        trasporterEmail.sendMail({
+        this.trasporterEmail.sendMail({
             from: "Server admin",
             to: usuario.username,
             subject: `Nuevo depido de: ${usuario.name}, ${usuario.username}`,
