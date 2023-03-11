@@ -8,9 +8,9 @@ import parseArgs from 'minimist';
 
 
 // para  nginx y local
-const __filename = fileURLToPath(import.meta.url);
+// const __filename = fileURLToPath(import.meta.url);
 // para babel 
-// const __filename = process.argv[1];
+const __filename = process.argv[1];
 const __dirname = path.dirname(__filename);
 dotenv.config({
     path: path.resolve(__dirname, 'data.Config.env')

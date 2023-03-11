@@ -14,18 +14,18 @@ import compression from 'compression'
 import handlebars from 'express-handlebars'
 
 
-import loginModel from "./src/dbOperations/models/login.model.js"
-import { options } from "./src/config/app.Config.js";
-import { logger } from './src/config/logger.js'
-import {ContenedorDaoEmails} from "./src/dbOperations/index.js";
-import carritos from './src/routes/api/carrito.routes.js'
-import login from './src/routes/api/login.routes.js'
-import logout from './src/routes/api/logout.routes.js'
-import vistasHandlebars from './src/routes/view.routes.js'
-import socketsAPP from './src/dbOperations/managers/socketsManagerProducto.js'
-import productos from './src/routes/api/productos.routes.js'
-import chats from './src/routes/api/chat.routes.js'
-import socketsAPPChat from './src/dbOperations/managers/socketsManagerChat.js'
+import loginModel from "./dbOperations/models/login.model.js"
+import { options } from "./config/app.Config.js";
+import { logger } from './config/logger.js'
+import {ContenedorDaoEmails} from "./dbOperations/index.js";
+import carritos from './routes/api/carrito.routes.js'
+import login from './routes/api/login.routes.js'
+import logout from './routes/api/logout.routes.js'
+import vistasHandlebars from './routes/view.routes.js'
+import socketsAPP from './dbOperations/managers/socketsManagerProducto.js'
+import productos from './routes/api/productos.routes.js'
+import chats from './routes/api/chat.routes.js'
+import socketsAPPChat from './dbOperations/managers/socketsManagerChat.js'
 
 
 const emailApi = ContenedorDaoEmails;

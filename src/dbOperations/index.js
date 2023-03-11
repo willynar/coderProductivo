@@ -16,10 +16,7 @@ let ContenedorDaoWhatsap;
 let ContenedorDaoChats;
 
 
-const { emailGmail } = await import("./daos/email/emailGmail.js");
-const { whatsappTwilio } = await import("./daos/whatsap/whatsappTwilioDao.js");
-ContenedorDaoEmails = new emailGmail(options.trasporterEmail);
-ContenedorDaoWhatsap = new whatsappTwilio(options.twilio);
+
 
 switch (databaseType) {
     case "archivos":
@@ -48,7 +45,11 @@ switch (databaseType) {
         ContenedorDaoCarritos = new carritosDaoMongo(carritosModel);
         ContenedorDaoChats = new chatDaoMongo(chatModel);
         ContenedorDaoLogins = new loginDaoMongo(loginModel);
+        const { emailGmail } = await import("./daos/email/emailGmail.js");
+        const { whatsappTwilio } = await import("./daos/whatsap/whatsappTwilioDao.js");
+        ContenedorDaoEmails = new emailGmail(options.trasporterEmail);
+        ContenedorDaoWhatsap = new whatsappTwilio(options.twilio);
         break;
 }
 
-export { ContenedorDaoProductos, ContenedorDaoCarritos, ContenedorDaoLogins, ContenedorDaoEmails, ContenedorDaoWhatsap,ContenedorDaoChats }
+export { ContenedorDaoProductos, ContenedorDaoCarritos, ContenedorDaoLogins, ContenedorDaoEmails, ContenedorDaoWhatsap, ContenedorDaoChats }
