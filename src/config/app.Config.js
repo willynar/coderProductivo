@@ -4,8 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config()
 import os from 'os'
 import parseArgs from 'minimist';
-import { createTransport } from 'nodemailer';
-
+import { createTransport } from 'nodeMailer';
 
 // para  nginx y local
 const __filename = fileURLToPath(import.meta.url);
