@@ -14,7 +14,7 @@
     sessionStorage.setItem("admin", false)
     function render() {
         let id = sessionStorage.getItem("idCarrito")
-        fetch(`http://${location.host}/api/carrito/${id}/productos`)
+        fetch(`https://${location.host}/api/carrito/${id}/productos`)
             // Converting received data to JSON
             .then((response) => response.json())
             .then((data) => {
@@ -50,7 +50,7 @@
     }
 
     function removeProductCarrito(id_pro, id) {
-        fetch(`http://${location.host}/api/carrito/${id}/productos/${id_pro}`, {
+        fetch(`https://${location.host}/api/carrito/${id}/productos/${id_pro}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
         })
@@ -66,7 +66,7 @@
 
         let id = sessionStorage.getItem("idCarrito")
         if (id == null || id == undefined) {
-            fetch(`http://${location.host}/api/carrito`, {
+            fetch(`https://${location.host}/api/carrito`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             })
@@ -112,7 +112,7 @@
     function BuyProducts() {
         let id = sessionStorage.getItem("idCarrito");
         let idUsuario = sessionStorage.getItem("idUsuario");
-        fetch(`http://${location.host}/api/carrito/${id}/comprar/${idUsuario}`, {
+        fetch(`https://${location.host}/api/carrito/${id}/comprar/${idUsuario}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         })

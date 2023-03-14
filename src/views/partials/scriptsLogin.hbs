@@ -16,7 +16,7 @@
             "username": $("input[name='username']").val(),
             "password": $("input[name='password']").val(),
         }
-        fetch(`http://${location.host}/api/login`, {
+        fetch(`https://${location.host}/api/login`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'application/json' },
@@ -33,7 +33,7 @@
                     sessionStorage.setItem("avatar", response.url)
                     setTimeout(function () {
                         //se redirige a la pagina de inicio
-                        window.location.href = `http://${location.host}/`;
+                        window.location.href = `https://${location.host}/`;
                     }, 2000);
                 }
             });

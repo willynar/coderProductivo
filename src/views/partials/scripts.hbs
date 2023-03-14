@@ -27,7 +27,7 @@
             "foto": $("input[name='foto']").val(),
         }
         let admin = sessionStorage.getItem("admin")
-        fetch(`http://${location.host}/api/productos`, {
+        fetch(`https://${location.host}/api/productos`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { 'Content-Type': 'application/json', 'AdminMode': admin },
@@ -56,14 +56,14 @@
                 "stock": true,
                 "foto": $("input[name='foto']").val(),
             }
-            fetch(`http://${location.host}/api/productos`, {
+            fetch(`https://${location.host}/api/productos`, {
                 method: 'PUT',
                 body: JSON.stringify(data),
                 headers: { 'Content-Type': 'application/json', 'AdminMode': admin },
             })
                 .then(response => response.json())
                 .catch(error => console.error('Error:', error))
-                .then(response => { window.location = `http://${location.host}/cargados`; alert(`Producto actualizado`); });
+                .then(response => { window.location = `https://${location.host}/cargados`; alert(`Producto actualizado`); });
 
         } else {
             alert('Por favor active el modo admin')
@@ -72,9 +72,9 @@
 
     function render() {
         var URLactual = window.location;
-        if (URLactual == `http://${location.host}/cargados`) {
+        if (URLactual == `https://${location.host}/cargados`) {
 
-            fetch(`http://${location.host}/api/productos`)
+            fetch(`https://${location.host}/api/productos`)
                 // Converting received data to JSON
                 .then((response) => response.json())
                 .then((data) => {
@@ -120,7 +120,7 @@
 
         let id = sessionStorage.getItem("idCarrito")
         if (id == null || id == undefined) {
-            fetch(`http://${location.host}/api/carrito`, {
+            fetch(`https://${location.host}/api/carrito`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
             })
@@ -137,9 +137,9 @@
         crearIdLocalCarrito()
         let id = sessionStorage.getItem("idCarrito")
 
-        const response = await fetch(`http://${location.host}/api/productos/${id_pro}`);
+        const response = await fetch(`https://${location.host}/api/productos/${id_pro}`);
         let producto = await response.json();
-        fetch(`http://${location.host}/api/carrito/${id}/productos`, {
+        fetch(`https://${location.host}/api/carrito/${id}/productos`, {
             method: 'POST',
             body: JSON.stringify(producto),
             headers: { 'Content-Type': 'application/json' },
@@ -166,7 +166,7 @@
 
     async function deleteProduct(id_pro) {
         let admin = sessionStorage.getItem("admin")
-        fetch(`http://${location.host}/api/productos/${id_pro}`, {
+        fetch(`https://${location.host}/api/productos/${id_pro}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json', 'AdminMode': admin },
         })
@@ -178,7 +178,7 @@
     async function updateProduct(id_pro) {
 
         let admin = sessionStorage.getItem("admin")
-        window.location = `http://${location.host}/actualizar/${id_pro}`
+        window.location = `https://${location.host}/actualizar/${id_pro}`
     }
 
     async function validarAdminn() {
