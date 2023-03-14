@@ -51,7 +51,7 @@ debugger;
         '</li>'
       document.getElementById("navegadorid").innerHTML += html
     } else {
-      fetch(`http://localhost:8080/api/logout`, {
+      fetch(`http://${location.host}/api/logout`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       })
