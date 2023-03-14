@@ -91,7 +91,7 @@ export const options = {
         },
         default: {
             mode: 'FORK',
-            port: 4000
+            port: 80
         }
     })
 }
