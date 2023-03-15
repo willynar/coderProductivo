@@ -35,27 +35,29 @@
     let idUsuario = sessionStorage.getItem("idUsuario")
     let usuario = sessionStorage.getItem("usuario")
     let avatar = sessionStorage.getItem("avatar")
-    //se valida si existe session de usuario y adiciona menu usuario
-    if (usuario && idUsuario && avatar) {
-      let html =
-        '<img style="width: 50px;border-radius: 25px;" src="' + avatar + '">' +
-        ' <li class="nav-item dropdown">' +
-        '<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + usuario + '</a>' +
-        '<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
-        '<a class="dropdown-item" href="/perfil/' + idUsuario + '">Perfil</a>' +
-        '<a class="dropdown-item" href="/api/logout">Logout</a>' +
-        ' <button class="dropdown-item" style="border: none;" id="navAdmin" onclick="AdminMode()">Admin/Normal Productos</button>' +
-        '<div class="dropdown-divider"></div>' +
-        '</div>' +
-        '</li>'
-      document.getElementById("navegadorid").innerHTML += html
-    } else {
-      fetch(`https://${location.host}/api/logout`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then(response => response.json())
-        .catch(error => console.error('Error:', error))
-    }
+    setTimeout(function () {
+      //se valida si existe session de usuario y adiciona menu usuario
+      if (usuario != null && idUsuario != null && avatar != null) {
+        let html =
+          '<img style="width: 50px;border-radius: 25px;" src="' + avatar + '">' +
+          ' <li class="nav-item dropdown">' +
+          '<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' + usuario + '</a>' +
+          '<div class="dropdown-menu" aria-labelledby="navbarDropdown">' +
+          '<a class="dropdown-item" href="/perfil/' + idUsuario + '">Perfil</a>' +
+          '<a class="dropdown-item" href="/api/logout">Logout</a>' +
+          ' <button class="dropdown-item" style="border: none;" id="navAdmin" onclick="AdminMode()">Admin/Normal Productos</button>' +
+          '<div class="dropdown-divider"></div>' +
+          '</div>' +
+          '</li>'
+        document.getElementById("navegadorid").innerHTML += html
+      } else {
+        fetch(`https://${location.host}/api/logout`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        })
+          .then(response => response.json())
+          .catch(error => console.error('Error:', error))
+      }
+    }, 2000);
   }
 </script>
