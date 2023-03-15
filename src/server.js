@@ -1,5 +1,5 @@
 import express from 'express';
-import * as https from 'https'
+import * as http from 'http';
 import * as socketIo from 'socket.io';
 import path from 'path';
 import cookieParser from "cookie-parser";
@@ -33,7 +33,7 @@ const emailApi = ContenedorDaoEmails;
 logger.warn('modo', options.objArguments.mode, 'PORT', options.objArguments.port)
 
 const app = express()
-const httpServer = new https.createServer(app)
+const httpServer = new http.createServer(app)
 const io = new socketIo.Server(httpServer)
 app.set('socketio', io);
 
