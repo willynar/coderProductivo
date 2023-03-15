@@ -56,7 +56,10 @@
           headers: { 'Content-Type': 'application/json' },
         })
           .then(response => response.json())
-          .catch(error => console.error('Error:', error))
+          .catch(error => {
+            console.error('Error:', error);
+            window.location.href = `http://${location.host}/login-user`;
+          })
       }
     }, 2000);
   }
