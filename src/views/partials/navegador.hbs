@@ -56,12 +56,7 @@
           headers: { 'Content-Type': 'application/json' },
         })
           .then(response => response.json())
-          .catch(error => fetch(`https://${location.host}/api/logout`, {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-          })
-            .then(response => response.json())
-            .catch(error => console.error('Error:', error)))
+          .catch(error => console.error('Error:', error))
       }
     }, 2000);
   }

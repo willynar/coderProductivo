@@ -164,7 +164,7 @@ app.post("/singup", passport.authenticate("signupStrategy", {
     failureRedirect: "/erroPage",
     failureMessage: true
 }), (req, res) => {
-    res.redirect("/home")
+    res.redirect("/login-user")
 })
 
 //se inicializa midleware para inprimir todas las urs  alas que se acceda
