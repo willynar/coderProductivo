@@ -1,5 +1,5 @@
 import express from 'express';
-import * as http from 'http';
+import * as https from 'https'
 import * as socketIo from 'socket.io';
 import path from 'path';
 import cookieParser from "cookie-parser";
@@ -22,7 +22,6 @@ import carritos from './routes/api/carrito.routes.js'
 import login from './routes/api/login.routes.js'
 import logout from './routes/api/logout.routes.js'
 import vistasHandlebars from './routes/view.routes.js'
-import socketsAPP from './dbOperations/managers/socketsManagerProducto.js'
 import productos from './routes/api/productos.routes.js'
 import chats from './routes/api/chat.routes.js'
 import socketsAPPChat from './dbOperations/managers/socketsManagerChat.js'
@@ -34,7 +33,7 @@ const emailApi = ContenedorDaoEmails;
 logger.warn('modo', options.objArguments.mode, 'PORT', options.objArguments.port)
 
 const app = express()
-const httpServer = new http.createServer(app)
+const httpServer = new https.createServer(app)
 const io = new socketIo.Server(httpServer)
 app.set('socketio', io);
 
@@ -91,7 +90,6 @@ if (options.objArguments.mode === 'CLUSTER' && cluster.isPrimary) {
     httpServer.on('error', error => logger.error(`Error en servidor ${error}`))
 
     io.on('connection', async (socket) => {
-        await socketsAPP.Inicializar(socket, io)
         await socketsAPPChat.Inicializar(socket, io)
     })
 }
